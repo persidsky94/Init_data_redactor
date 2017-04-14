@@ -1,0 +1,74 @@
+#include "moveitem.h"
+
+MoveItem::MoveItem(QObject *parent) :
+	QObject(parent), QGraphicsItem()
+{
+	connect(this, SIGNAL(itemSelected(MoveItem*)), parent, SLOT(on_itemSelected(MoveItem*)));
+	connect(this, SIGNAL(itemDragged(MoveItem*)), parent, SLOT(on_itemDragged(MoveItem*)));
+}
+
+MoveItem::~MoveItem()
+{
+}
+
+QRectF MoveItem::boundingRect() const
+{
+	/* first 2 numbers - top left corner, last 2 - width and height */
+	return QRectF (-12,-12,24,24);
+}
+
+void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	painter->setPen(Qt::red);
+	painter->setBrush(Qt::red);
+	QLine firstCrossLine(-8,-8,8,8);
+	QLine secondCrossLine(8,-8,-8,8);
+	painter->drawLine(firstCrossLine);
+	painter->drawLine(secondCrossLine);
+	Q_UNUSED(option);
+	Q_UNUSED(widget);
+}
+
+void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+	/* Устанавливаем позицию графического элемента
+	 * в графической сцене, транслировав координаты
+	 * курсора внутри графического элемента
+	 * в координатную систему графической сцены
+	 * */
+	auto validCoordinates = calculateValidCoordinates(event->pos());
+	this->setPos(validCoordinates);
+	itemDragged(this);
+}
+
+QPointF MoveItem::calculateValidCoordinates(QPointF mousePosition)
+{
+	QRectF sceneRect = (this->scene())->sceneRect();
+	auto newx = (mapToScene(mousePosition)).rx();
+	auto newy = (mapToScene(mousePosition)).ry();
+	newx = std::max(newx, sceneRect.left());
+	newx = std::min(newx, sceneRect.right());
+	newy = std::max(newy, sceneRect.top());
+	newy = std::min(newy, sceneRect.bottom());
+	QPointF validCoordinates = QPointF(newx, newy);
+	return validCoordinates;
+}
+
+void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	/* При нажатии мышью на графический элемент
+	 * заменяем курсор на руку, которая держит этот элемента
+	 * */
+	this->setCursor(QCursor(Qt::ClosedHandCursor));
+	emit itemSelected(this);
+	Q_UNUSED(event);
+}
+
+void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+	/* При отпускании мышью элемента
+	 * заменяем на обычный курсор стрелку
+	 * */
+	this->setCursor(QCursor(Qt::ArrowCursor));
+	Q_UNUSED(event);
+}
