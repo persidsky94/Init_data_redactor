@@ -28,14 +28,18 @@ SOURCES += main.cpp\
     mainwindow.cpp \
     gridscene.cpp \
     sourceitem.cpp \
-    recieveritem.cpp
+    recieveritem.cpp \
+    vertexitem.cpp \
+    polygonitem.cpp
 
 HEADERS  += \
     moveitem.h \
     mainwindow.h \
     gridscene.h \
     sourceitem.h \
-    recieveritem.h
+    recieveritem.h \
+    vertexitem.h \
+    polygonitem.h
 
 FORMS    += \
     mainwindow.ui

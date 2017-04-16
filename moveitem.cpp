@@ -5,6 +5,7 @@ MoveItem::MoveItem(QObject *parent) :
 {
 	connect(this, SIGNAL(itemSelected(MoveItem*)), parent, SLOT(on_itemSelected(MoveItem*)));
 	connect(this, SIGNAL(itemDragged(MoveItem*)), parent, SLOT(on_itemDragged(MoveItem*)));
+	this->setFlags(QGraphicsItem::ItemIgnoresTransformations);
 }
 
 MoveItem::~MoveItem()
@@ -36,21 +37,22 @@ void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	 * курсора внутри графического элемента
 	 * в координатную систему графической сцены
 	 * */
-	auto validCoordinates = calculateValidCoordinates(event->pos());
+	auto newCoordinates = this->pos() + (event->pos() - event->lastPos());
+	auto validCoordinates = calculateValidCoordinates(newCoordinates);//this->pos() + (event->pos() - event->lastPos());//calculateValidCoordinates(event->pos());
 	this->setPos(validCoordinates);
 	itemDragged(this);
 }
 
-QPointF MoveItem::calculateValidCoordinates(QPointF mousePosition)
+QPointF MoveItem::calculateValidCoordinates(QPointF newCoordinates)
 {
 	QRectF sceneRect = (this->scene())->sceneRect();
-	auto newx = (mapToScene(mousePosition)).rx();
-	auto newy = (mapToScene(mousePosition)).ry();
+	auto newx = mapToScene(mapFromParent(newCoordinates)).rx();
+	auto newy = mapToScene(mapFromParent(newCoordinates)).ry();
 	newx = std::max(newx, sceneRect.left());
 	newx = std::min(newx, sceneRect.right());
 	newy = std::max(newy, sceneRect.top());
 	newy = std::min(newy, sceneRect.bottom());
-	QPointF validCoordinates = QPointF(newx, newy);
+	QPointF validCoordinates = mapToParent(mapFromScene(QPointF(newx, newy)));
 	return validCoordinates;
 }
 

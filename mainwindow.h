@@ -7,6 +7,8 @@
 #include <gridscene.h>
 #include <sourceitem.h>
 #include <recieveritem.h>
+#include <vertexitem.h>
+#include <polygonitem.h>
 
 namespace Ui {
 class MainWindow;
@@ -24,19 +26,23 @@ public:
 private:
 	void setSceneSize(int width, int height);
 	void setViewOptions();
+	void fillSelectionBox();
+	void emptySelectionBox();
+	void deleteSelectedItem();
 
 private slots:
 	void on_actionAddSource_triggered();
-	void on_addItemOfType2Button_clicked();
+	void on_actionAddReciever_triggered();
+	void on_actionAddVertex_triggered();
+	void on_actionAddPolygon_triggered();
 	void on_setItemCoordinatesButton_clicked();
 	void on_deleteItemButton_clicked();
 	void on_itemSelected(MoveItem *selectedItem);
 	void on_itemDragged(MoveItem *draggedItem);
-	void on_zoomInButton_clicked();
-	void on_zoomOutButton_clicked();
+	void on_actionZoomIn_triggered();
+	void on_actionZoomOut_triggered();
 	void on_sceneMouseMoved(QPointF mousePosition);
 
-	void on_debugButton_clicked();
 
 private:
 	Ui::MainWindow *ui;
@@ -45,11 +51,6 @@ private:
 	int sceneSizey;
 	MoveItem *selectedItem = NULL;
 	const int scrollbarThikness = 16;
-
-
-	void fillSelectionBox();
-	void emptySelectionBox();
-	void deleteSelectedItem();
 };
 
 #endif // MAINWINDOW_H

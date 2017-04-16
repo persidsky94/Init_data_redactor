@@ -83,45 +83,6 @@
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
-        <item alignment="Qt::AlignRight">
-         <widget class="QGroupBox" name="actionsGroupBox">
-          <property name="minimumSize">
-           <size>
-            <width>220</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>220</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="title">
-           <string>Actions</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <item>
-              <widget class="QPushButton" name="addSourceButton">
-               <property name="text">
-                <string>Add source</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="addItemOfType2Button">
-               <property name="text">
-                <string>Add square type 2</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
         <item>
          <widget class="QGroupBox" name="groupBox">
           <property name="minimumSize">
@@ -252,73 +213,31 @@
               </widget>
              </item>
              <item>
+              <widget class="QPushButton" name="itemOptionsButton">
+               <property name="text">
+                <string>Options</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
               <widget class="QPushButton" name="deleteItemButton">
                <property name="text">
                 <string>Delete item</string>
                </property>
               </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="zoomGroupBox">
-          <property name="maximumSize">
-           <size>
-            <width>220</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="title">
-           <string>Zoom view</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_11">
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_10">
-             <item>
-              <widget class="QPushButton" name="zoomInButton">
-               <property name="text">
-                <string>Zoom in</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="zoomOutButton">
-               <property name="text">
-                <string>Zoom out</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="debugGroupBox">
-          <property name="maximumSize">
-           <size>
-            <width>220</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="title">
-           <string>Debug</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_9">
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_8">
-             <item>
-              <widget class="QPushButton" name="debugButton">
-               <property name="text">
-                <string>Debug</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="debugLine"/>
              </item>
             </layout>
            </item>
@@ -360,6 +279,7 @@
     <addaction name="actionAddSource"/>
     <addaction name="actionAddReciever"/>
     <addaction name="actionAddPolygon"/>
+    <addaction name="actionAddVertex"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -396,29 +316,39 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionZoomIn"/>
+   <addaction name="actionZoomOut"/>
   </widget>
   <action name="actionAddSource">
-   <property name="icon">
-    <iconset>
-     <normaloff>../Изображения/b5c9NYiMbBk.jpg</normaloff>../Изображения/b5c9NYiMbBk.jpg</iconset>
-   </property>
    <property name="text">
     <string>Source</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+A</string>
    </property>
   </action>
   <action name="actionAddReciever">
    <property name="text">
     <string>Reciever</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+R</string>
+   </property>
   </action>
   <action name="actionAddPolygon">
    <property name="text">
     <string>Polygon</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+P</string>
+   </property>
   </action>
   <action name="actionSave_initial_data">
    <property name="text">
     <string>Save initial data</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionLoad_initial_data">
@@ -434,6 +364,30 @@
   <action name="actionOpen_in_this_window">
    <property name="text">
     <string>Open in this window</string>
+   </property>
+  </action>
+  <action name="actionZoomIn">
+   <property name="text">
+    <string>ZoomIn</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="actionZoomOut">
+   <property name="text">
+    <string>ZoomOut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionAddVertex">
+   <property name="text">
+    <string>Vertex</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+V</string>
    </property>
   </action>
  </widget>

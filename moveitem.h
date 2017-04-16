@@ -25,12 +25,14 @@ signals:
 private:
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-	QPointF calculateValidCoordinates(QPointF mousePosition);
+	virtual QPointF calculateValidCoordinates(QPointF mousePosition);
 
 public slots:
+
+protected:
+	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // MOVEITEM_H

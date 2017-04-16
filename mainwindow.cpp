@@ -62,11 +62,26 @@ void MainWindow::on_actionAddSource_triggered()
 	scene->addItem(item);   // Добавляем элемент на графическую сцену
 }
 
-void MainWindow::on_addItemOfType2Button_clicked()
+void MainWindow::on_actionAddReciever_triggered()
 {
 	MoveItem *item = new RecieverItem(this);        // Создаём графический элемента
 	item->setPos(randomBetween(30, 470),    // Устанавливаем случайную позицию элемента
 				 randomBetween(30,470));
+	scene->addItem(item);   // Добавляем элемент на графическую сцену
+}
+
+void MainWindow::on_actionAddVertex_triggered()
+{
+	MoveItem *item = new VertexItem(this);        // Создаём графический элемента
+	item->setPos(randomBetween(30, 470),    // Устанавливаем случайную позицию элемента
+				 randomBetween(30,470));
+	scene->addItem(item);   // Добавляем элемент на графическую сцену
+}
+
+void MainWindow::on_actionAddPolygon_triggered()
+{
+	MoveItem *item = new PolygonItem(this);        // Создаём графический элемента
+	item->setPos(0,0);
 	scene->addItem(item);   // Добавляем элемент на графическую сцену
 }
 
@@ -125,13 +140,13 @@ void MainWindow::emptySelectionBox()
 	ui->type->setText("");
 }
 
-void MainWindow::on_zoomInButton_clicked()
+void MainWindow::on_actionZoomIn_triggered()
 {
 	ui->graphicsView->scale(1.2, 1.2);
 	updateGraphicsViewSize();
 }
 
-void MainWindow::on_zoomOutButton_clicked()
+void MainWindow::on_actionZoomOut_triggered()
 {
 	ui->graphicsView->scale(1/1.2, 1/1.2);
 	updateGraphicsViewSize();
@@ -153,14 +168,4 @@ void MainWindow::on_sceneMouseMoved(QPointF mousePosition)
 {
 	ui->mousex->setValue(mousePosition.rx());
 	ui->mousey->setValue(mousePosition.ry());
-}
-
-
-void MainWindow::on_debugButton_clicked()
-{
-	scene->invalidate(scene->sceneRect());
-	scene->update();
-	ui->graphicsView->repaint();
-	ui->graphicsView->update();
-	ui->graphicsView->viewport()->update();
 }
