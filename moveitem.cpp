@@ -32,11 +32,6 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-	/* Устанавливаем позицию графического элемента
-	 * в графической сцене, транслировав координаты
-	 * курсора внутри графического элемента
-	 * в координатную систему графической сцены
-	 * */
 	auto newCoordinates = this->pos() + (event->pos() - event->lastPos());
 	auto validCoordinates = calculateValidCoordinates(newCoordinates);//this->pos() + (event->pos() - event->lastPos());//calculateValidCoordinates(event->pos());
 	this->setPos(validCoordinates);
@@ -58,9 +53,6 @@ QPointF MoveItem::calculateValidCoordinates(QPointF newCoordinates)
 
 void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	/* При нажатии мышью на графический элемент
-	 * заменяем курсор на руку, которая держит этот элемента
-	 * */
 	this->setCursor(QCursor(Qt::ClosedHandCursor));
 	emit itemSelected(this);
 	Q_UNUSED(event);
@@ -68,9 +60,6 @@ void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	/* При отпускании мышью элемента
-	 * заменяем на обычный курсор стрелку
-	 * */
 	this->setCursor(QCursor(Qt::ArrowCursor));
 	Q_UNUSED(event);
 }

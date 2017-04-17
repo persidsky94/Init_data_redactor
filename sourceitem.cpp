@@ -33,3 +33,8 @@ QString SourceItem::getType()
 {
 	return QString("Source");
 }
+
+void SourceItem::on_optionsButton_clicked()
+{
+
+}

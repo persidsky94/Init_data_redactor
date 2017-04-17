@@ -31,6 +31,7 @@ private:
 	void deleteSelectedItem();
 
 private slots:
+	void on_actionOpen_in_new_window_triggered();
 	void on_actionAddSource_triggered();
 	void on_actionAddReciever_triggered();
 	void on_actionAddVertex_triggered();

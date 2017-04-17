@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     sourceitem.cpp \
     recieveritem.cpp \
     vertexitem.cpp \
-    polygonitem.cpp
+    polygonitem.cpp \
+    sourceoptions.cpp
 
 HEADERS  += \
     moveitem.h \
@@ -39,7 +40,9 @@ HEADERS  += \
     sourceitem.h \
     recieveritem.h \
     vertexitem.h \
-    polygonitem.h
+    polygonitem.h \
+    sourceoptions.h
 
 FORMS    += \
-    mainwindow.ui
+    mainwindow.ui \
+    sourceoptions.ui

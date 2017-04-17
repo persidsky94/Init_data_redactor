@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Calculation</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -359,6 +359,9 @@
   <action name="actionOpen_in_new_window">
    <property name="text">
     <string>Open in new window</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+N</string>
    </property>
   </action>
   <action name="actionOpen_in_this_window">

@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-/* Функция для получения рандомного числа
- * в диапазоне от минимального до максимального
- * */
 static int randomBetween(int low, int high)
 {
 	return (qrand() % ((high + 1) - low) + low);
@@ -17,11 +14,11 @@ MainWindow::MainWindow(QMainWindow *parent) :
 
 	this->showMaximized();
 
-	scene = new GridScene(this);   // Инициализируем графическую сцену
-	scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex/*NoIndex*/); // настраиваем индексацию элементов
+	scene = new GridScene(this);
+	scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex/*NoIndex*/);
 	setSceneSize(800,600);
 
-	ui->graphicsView->setScene(scene);  // Устанавливаем графическую сцену в graphicsView
+	ui->graphicsView->setScene(scene);
 	setViewOptions();
 	updateGraphicsViewSize();
 
@@ -43,8 +40,8 @@ void MainWindow::setSceneSize(int width, int height)
 
 void MainWindow::setViewOptions()
 {
-	ui->graphicsView->setRenderHint(QPainter::Antialiasing);    // Настраиваем рендер
-	ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground); // Кэш фона
+	ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+	ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground);
 	ui->graphicsView->setViewportUpdateMode(QGraphicsView::/*BoundingRectViewportUpdate*/FullViewportUpdate);
 
 }
@@ -56,33 +53,33 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionAddSource_triggered()
 {
-	MoveItem *item = new SourceItem(this);        // Создаём графический элемента
-	item->setPos(randomBetween(30, 470),    // Устанавливаем случайную позицию элемента
+	MoveItem *item = new SourceItem(this);
+	item->setPos(randomBetween(30, 470),
 				 randomBetween(30,470));
-	scene->addItem(item);   // Добавляем элемент на графическую сцену
+	scene->addItem(item);
 }
 
 void MainWindow::on_actionAddReciever_triggered()
 {
-	MoveItem *item = new RecieverItem(this);        // Создаём графический элемента
-	item->setPos(randomBetween(30, 470),    // Устанавливаем случайную позицию элемента
+	MoveItem *item = new RecieverItem(this);
+	item->setPos(randomBetween(30, 470),
 				 randomBetween(30,470));
-	scene->addItem(item);   // Добавляем элемент на графическую сцену
+	scene->addItem(item);
 }
 
 void MainWindow::on_actionAddVertex_triggered()
 {
-	MoveItem *item = new VertexItem(this);        // Создаём графический элемента
-	item->setPos(randomBetween(30, 470),    // Устанавливаем случайную позицию элемента
+	MoveItem *item = new VertexItem(this);
+	item->setPos(randomBetween(30, 470),
 				 randomBetween(30,470));
-	scene->addItem(item);   // Добавляем элемент на графическую сцену
+	scene->addItem(item);
 }
 
 void MainWindow::on_actionAddPolygon_triggered()
 {
-	MoveItem *item = new PolygonItem(this);        // Создаём графический элемента
+	MoveItem *item = new PolygonItem(this);
 	item->setPos(0,0);
-	scene->addItem(item);   // Добавляем элемент на графическую сцену
+	scene->addItem(item);
 }
 
 void MainWindow::on_itemSelected(MoveItem *item)
@@ -168,4 +165,9 @@ void MainWindow::on_sceneMouseMoved(QPointF mousePosition)
 {
 	ui->mousex->setValue(mousePosition.rx());
 	ui->mousey->setValue(mousePosition.ry());
+}
+
+void MainWindow::on_actionOpen_in_new_window_triggered()
+{
+	auto newCalc = new MainWindow();
 }

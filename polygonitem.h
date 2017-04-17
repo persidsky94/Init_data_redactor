@@ -36,13 +36,9 @@ private:
 	void updateVerticesPolygon();
 	void bindVertexSignals(VertexItem *);
 
-
+	int density = 1000;
 	QVector<VertexItem *> pVertices;
 	QPolygonF verticesPolygon;
-	VertexItem *topVertex;
-	VertexItem *botVertex;
-	VertexItem *leftVertex;
-	VertexItem *rightVertex;
 };
 
 #endif // POLYGONITEM_H

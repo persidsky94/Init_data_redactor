@@ -10,7 +10,6 @@ PolygonItem::PolygonItem(QObject *parent)
 	firstVertex->setPos(0,0);
 	firstVertex->setParentItem(this);
 	pVertices.append(firstVertex);
-	topVertex = botVertex = leftVertex = rightVertex = firstVertex;
 	bindVertexSignals(firstVertex);
 	updateVerticesPolygon();
 }
