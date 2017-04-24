@@ -11,8 +11,10 @@ class SourceItem : public MoveItem
 {
 	Q_OBJECT
 public:
-	explicit SourceItem(QObject *parent = 0);
+	explicit SourceItem(SourceOptions::source_params params, QObject *parent = 0);
 	~SourceItem();
+	SourceOptions::source_params getParams();
+	void setParams(SourceOptions::source_params params);
 
 
 private:
@@ -20,6 +22,7 @@ private:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 	QString getType();
 
+	QString name;
 	SourceOptions::SourceType type = SourceOptions::SourceType::Point;
 	SourceOptions::SignalType signal = SourceOptions::SignalType::Sin;
 

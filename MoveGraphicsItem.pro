@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     recieveritem.cpp \
     vertexitem.cpp \
     polygonitem.cpp \
-    sourceoptions.cpp
+    sourceoptions.cpp \
+    recieveroptions.cpp
 
 HEADERS  += \
     moveitem.h \
@@ -41,8 +42,10 @@ HEADERS  += \
     recieveritem.h \
     vertexitem.h \
     polygonitem.h \
-    sourceoptions.h
+    sourceoptions.h \
+    recieveroptions.h
 
 FORMS    += \
     mainwindow.ui \
-    sourceoptions.ui
+    sourceoptions.ui \
+    recieveroptions.ui

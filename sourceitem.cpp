@@ -1,8 +1,9 @@
 #include "sourceitem.h"
 
-SourceItem::SourceItem(QObject *parent)
+SourceItem::SourceItem(SourceOptions::source_params params, QObject *parent)
 	: MoveItem(parent)
 {
+	setParams(params);
 }
 
 SourceItem::~SourceItem()
@@ -32,6 +33,19 @@ void SourceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 QString SourceItem::getType()
 {
 	return QString("Source");
+}
+
+SourceOptions::source_params SourceItem::getParams()
+{
+	return SourceOptions::source_params(name, type, signal, this->pos().rx(), this->pos().ry());
+}
+
+void SourceItem::setParams(SourceOptions::source_params params)
+{
+	name = params.name;
+	type = params.sourceType;
+	signal = params.signalType;
+	this->setPos(params.x, params.y);
 }
 
 void SourceItem::on_optionsButton_clicked()

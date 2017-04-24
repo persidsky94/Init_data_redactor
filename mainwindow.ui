@@ -324,7 +324,7 @@
     <string>Source</string>
    </property>
    <property name="shortcut">
-    <string>Shift+A</string>
+    <string>Shift+S</string>
    </property>
   </action>
   <action name="actionAddReciever">

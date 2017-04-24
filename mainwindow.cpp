@@ -53,10 +53,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionAddSource_triggered()
 {
-	MoveItem *item = new SourceItem(this);
-	item->setPos(randomBetween(30, 470),
-				 randomBetween(30,470));
-	scene->addItem(item);
+	SourceOptions *dialog = new SourceOptions(this, scene->sceneRect(), SourceOptions::source_params());
+	if (dialog->exec())
+	{
+		SourceOptions::source_params params = dialog->getParams();
+		MoveItem *item = new SourceItem(params, this);
+		scene->addItem(item);
+	}
+	delete dialog;
 }
 
 void MainWindow::on_actionAddReciever_triggered()
@@ -111,6 +115,24 @@ void MainWindow::on_setItemCoordinatesButton_clicked()
 	{
 		QPointF newCoordinates = QPointF(ui->xBox->value(), ui->yBox->value());
 		selectedItem->setPos(newCoordinates);
+	}
+}
+
+void MainWindow::on_itemOptionsButton_clicked()
+{
+	if (selectedItem != NULL)
+	{
+		if (selectedItem->getType() == QString("Source"))
+		{
+			auto source = ((SourceItem *)selectedItem);
+			SourceOptions *dialog = new SourceOptions(this, scene->sceneRect(), source->getParams());
+			if (dialog->exec())
+			{
+				SourceOptions::source_params params = dialog->getParams();
+				source->setParams(params);
+			}
+			delete dialog;
+		}
 	}
 }
 

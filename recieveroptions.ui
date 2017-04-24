@@ -1,70 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SourceOptions</class>
- <widget class="QDialog" name="SourceOptions">
+ <class>recieveroptions</class>
+ <widget class="QDialog" name="recieveroptions">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>297</width>
-    <height>239</height>
+    <width>317</width>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Source Options</string>
+   <string>Reciever Options</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="nameLabel">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="nameLine"/>
+     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="typeLabel">
        <property name="text">
-        <string>Source type</string>
+        <string>Type</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="sourceComboBox"/>
+      <widget class="QComboBox" name="typeBox"/>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="signalLabel">
+      <widget class="QLabel" name="numberLabel">
        <property name="text">
-        <string>Signal type</string>
+        <string>Number of recievers</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="signalComboBox"/>
+      <widget class="QSpinBox" name="numberSpinBox"/>
      </item>
      <item row="3" column="0">
-      <widget class="QLabel" name="sourcexLabel">
-       <property name="text">
-        <string>x</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="sourceyLabel">
+      <widget class="QLabel" name="yLabel">
        <property name="text">
         <string>y</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QSpinBox" name="sourcexBox"/>
+      <widget class="QSpinBox" name="ySpinBox"/>
      </item>
-     <item row="4" column="1">
-      <widget class="QSpinBox" name="sourceyBox"/>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="sourceNameLabel">
+     <item row="4" column="0">
+      <widget class="QLabel" name="firstxLabel">
        <property name="text">
-        <string>Source name</string>
+        <string>First x</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="sourceNameLine"/>
+     <item row="5" column="0">
+      <widget class="QLabel" name="lastxLabel">
+       <property name="text">
+        <string>Last x</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QSpinBox" name="firstxSpinBox"/>
+     </item>
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="lastxSpinBox"/>
      </item>
     </layout>
    </item>
@@ -85,7 +95,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>SourceOptions</receiver>
+   <receiver>recieveroptions</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -101,7 +111,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>SourceOptions</receiver>
+   <receiver>recieveroptions</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

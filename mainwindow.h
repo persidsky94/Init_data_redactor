@@ -37,6 +37,7 @@ private slots:
 	void on_actionAddVertex_triggered();
 	void on_actionAddPolygon_triggered();
 	void on_setItemCoordinatesButton_clicked();
+	void on_itemOptionsButton_clicked();
 	void on_deleteItemButton_clicked();
 	void on_itemSelected(MoveItem *selectedItem);
 	void on_itemDragged(MoveItem *draggedItem);
