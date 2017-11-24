@@ -5,29 +5,29 @@
 #include <QString>
 
 #include <moveitem.h>
-#include <sourceoptions.h>
+#include <sourceparams.h>
 
 class SourceItem : public MoveItem
 {
 	Q_OBJECT
 public:
-	explicit SourceItem(SourceOptions::source_params params, QObject *parent = 0);
+	explicit SourceItem(sourceParams params, QObject *parent/* = 0*/);
 	~SourceItem();
-	SourceOptions::source_params getParams();
-	void setParams(SourceOptions::source_params params);
+	sourceParams getParams();
+	void setParams(sourceParams params);
+	QString getName() {return getParams().name;}
 
+signals:
+	void paramsChanged(sourceParams params);
 
 private:
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 	QString getType();
+	void on_positionIsSet();
 
-	QString name;
-	SourceOptions::SourceType type = SourceOptions::SourceType::Point;
-	SourceOptions::SignalType signal = SourceOptions::SignalType::Sin;
-
-private slots:
-	void on_optionsButton_clicked();
+	static int _sourceSize = 12;
+	sourceParams _params;
 };
 
 #endif // SOURCEITEM_H

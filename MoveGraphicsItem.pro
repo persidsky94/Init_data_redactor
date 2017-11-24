@@ -31,9 +31,9 @@ SOURCES += main.cpp\
     recieveritem.cpp \
     vertexitem.cpp \
     polygonitem.cpp \
-    sourceoptions.cpp \
     recievergroup.cpp \
-    recievergroupeditor.cpp
+    recievergroupeditor.cpp \
+    sourceeditor.cpp
 
 HEADERS  += \
     moveitem.h \
@@ -43,14 +43,16 @@ HEADERS  += \
     recieveritem.h \
     vertexitem.h \
     polygonitem.h \
-    sourceoptions.h \
     moveitem_copy.h \
     recievergroupparams.h \
     recievergroup.h \
     recievergroupeditor.h \
-    sourceparams.h
+    sourceparams.h \
+    sourceeditor.h \
+    vertexparams.h \
+    polygonparams.h
 
 FORMS    += \
     mainwindow.ui \
-    sourceoptions.ui \
-    recievergroupeditor.ui
+    recievergroupeditor.ui \
+    sourceeditor.ui

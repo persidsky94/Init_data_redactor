@@ -1,17 +1,66 @@
 #include "polygonitem.h"
 
-PolygonItem::PolygonItem(QObject *parent)
-	: MoveItem(parent)
+PolygonItem::PolygonItem(polygonParams params, QObject *parent)
+	: MoveItem(parent), _params(params)
 {
 	this->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
-	QPointF pos = QPointF(200,200);
-	this->setPos(pos);
-	VertexItem *firstVertex = new VertexItem(this);
-	firstVertex->setPos(0,0);
-	firstVertex->setParentItem(this);
-	pVertices.append(firstVertex);
-	bindVertexSignals(firstVertex);
+	connect(this, &PolygonItem::positionIsSet, this, &PolygonItem::on_positionIsSet);
+//	QPointF pos = QPointF(200,200);
+//	this->setPos(pos);
+	setParams(params);
+	int vertexIndex = 0;
+	qreal vertexLocalx = 0;
+	qreal vertexLocaly = 0;
+	createChildVertex(vertexIndex, vertexLocalx, vertexLocaly);
+}
+
+VertexItem *PolygonItem::createChildVertex(int index, qreal localx, qreal localy)
+{
+	if (index >= pVertices.size())
+		index = pVertices.size();
+	if (index < 0)
+		index = 0;
+	VertexItem *vertex = new VertexItem(this);
+	vertex->setParentItem(this);
+	vertex->setPos(localx, localy);
+	pVertices.insert(index, vertex);
+	bindVertexSignals(vertex);
 	updateVerticesPolygon();
+	if ((localx < 0) || (localy < 0))
+		updatePolygonPosToTopLeftOfVerticesBoundingRect();
+	emit childVertexCreated(this, vertex);
+}
+
+void PolygonItem::updatePolygonPosToTopLeftOfVerticesBoundingRect()
+{
+	auto BR = boundingRect();
+	auto topLeftBR = BR.topLeft();
+	auto params = _params;
+	params.x = this->pos().toPoint().x() + topLeftBR.rx();
+	params.y = this->pos().toPoint().y() + topLeftBR.ry();
+	moveAllVertecesBy(-topLeftBR.rx(), -topLeftBR.ry());
+	updateVerticesPolygon();
+	setParams(params);
+}
+
+//moves all vertices by vector (localx, localy)
+void PolygonItem::moveAllVertecesBy(qreal localx, qreal localy)
+{
+	for (int i=0; i<pVertices.size(); ++i)
+	{
+		auto prevx = pVertices[i]->pos().rx();
+		auto prevy = pVertices[i]->pos().ry();
+		pVertices[i]->setPos(prevx+localx, prevy+localy);
+	}
+	updateVerticesPolygon();
+}
+
+void PolygonItem::movePolygon(qreal scenex, qreal sceney)
+{
+	auto params = getParams();
+	params.x = scenex;
+	params.y = sceney;
+	setParams(params);
 }
 
 PolygonItem::~PolygonItem()
@@ -30,31 +79,62 @@ void PolygonItem::updateVerticesPolygon()
 	{
 		updatedPolygon << this->mapFromItem((pVertices[i]),0,0);
 	}
-	updatedPolygon << this->mapFromItem((pVertices[0]),0,0);
+	updatedPolygon << this->mapFromItem((pVertices[0]),0,0); //closes polygon
 	verticesPolygon = updatedPolygon;
 }
 
 void PolygonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-//painter->setBrush(Qt::red);
-//painter->drawRect(this->getBoundingRect());
 	painter->setPen(Qt::black);
 	QBrush brush = QBrush(QColor(255,0,255,128));
 	painter->setBrush(brush/*Qt::green*/);
 	painter->drawPolygon(verticesPolygon);
-//painter->drawEllipse(0,0,6,6);
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 }
 
 QString PolygonItem::getType()
 {
-	return QString("Polygon");
+	return QString("polygon");
+}
+
+polygonParams PolygonItem::getParams()
+{
+	return _params;
+}
+
+void PolygonItem::on_positionIsSet()
+{
+	auto params = _params;
+	params.x = this->pos().toPoint().x();
+	params.y = this->pos().toPoint().y();
+	setParams(params);
+}
+
+void PolygonItem::setParams(polygonParams params)
+{
+	auto prevBoundingRect = boundingRect();
+	bool name_has_changed = 0;
+	if (params.name != _params.name)
+		name_has_changed = 1;
+	_params = params;
+	auto newCoordinates = QPointF(_params.x, _params.y);
+	setPos(newCoordinates);
+	auto curBoundingRect = boundingRect();
+	if (name_has_changed)
+		emit nameChanged(this);
+	emit paramsChanged(_params);
+	if (this->scene())
+	{
+		this->scene()->update(mapRectToScene(prevBoundingRect));
+		this->scene()->update(mapRectToScene(curBoundingRect));
+	}
 }
 
 void PolygonItem::bindVertexSignals(VertexItem *vertex)
 {
 	connect(vertex, SIGNAL(vertexMoved(VertexItem*)), this, SLOT(on_vertexMoved(VertexItem*)));
+	connect(vertex, SIGNAL(vertexMoveFinished(VertexItem*)), this, SLOT(on_childVertexMoveFinished(VertexItem *)));
 	connect(vertex, SIGNAL(vertexAskToClone(VertexItem*)), this, SLOT(on_vertexAskToClone(VertexItem*)));
 	connect(vertex, SIGNAL(vertexDeleted(VertexItem*)), this, SLOT(on_vertexDeleted(VertexItem*)));
 }
@@ -63,6 +143,13 @@ void PolygonItem::on_vertexMoved(VertexItem *movedVertex)
 {
 	updateVerticesPolygon();
 	Q_UNUSED(movedVertex);
+}
+
+void PolygonItem::on_childVertexMoveFinished(VertexItem *movedVertex)
+{
+	auto pos = movedVertex->pos();
+	if (pos.rx()<0 || pos.ry()<0)
+		updatePolygonPosToTopLeftOfVerticesBoundingRect();
 }
 
 void PolygonItem::on_vertexAskToClone(VertexItem *clonedVertex)
@@ -125,7 +212,7 @@ QRectF PolygonItem::getBoundingRect()
 	return this->boundingRect();
 }
 
-QPointF PolygonItem::calculateValidCoordinates(QPointF newCoordinates)
+/*QPointF PolygonItem::calculateValidCoordinates(QPointF newCoordinates)
 {
 	QRectF sceneBR = this->scene()->sceneRect();
 	auto offset = newCoordinates - this->pos();
@@ -146,3 +233,4 @@ QPointF PolygonItem::calculateValidCoordinates(QPointF newCoordinates)
 	QPointF validCoordinates = (this->pos() + realOffset);
 	return validCoordinates;
 }
+*/

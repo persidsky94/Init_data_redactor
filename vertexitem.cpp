@@ -45,3 +45,9 @@ void VertexItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	else
 		MoveItem::mousePressEvent(event);
 }
+
+void VertexItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+	MoveItem::mouseReleaseEvent(event);
+	emit vertexMoveFinished(this);
+}

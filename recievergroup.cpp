@@ -7,7 +7,9 @@ RecieverGroup::RecieverGroup(recieverGroupParams params, QObject *parent)
 	setParams(params);
 }
 
-RecieverGroup::~RecieverGroup(){}
+RecieverGroup::~RecieverGroup()
+{
+}
 
 QRectF RecieverGroup::boundingRect() const
 {

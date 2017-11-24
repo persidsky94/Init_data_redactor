@@ -1,8 +1,9 @@
 #include "sourceitem.h"
 
-SourceItem::SourceItem(SourceOptions::source_params params, QObject *parent)
-	: MoveItem(parent)
+SourceItem::SourceItem(sourceParams params, QObject *parent)
+	: MoveItem(parent), _params(params)
 {
+	connect(this, &SourceItem::positionIsSet, this, &SourceItem::on_positionIsSet);
 	setParams(params);
 }
 
@@ -13,7 +14,7 @@ SourceItem::~SourceItem()
 QRectF SourceItem::boundingRect() const
 {
 	/* first 2 numbers - top left corner, last 2 - width and height */
-	return QRectF (-12,-12,24,24);
+	return QRectF (-_sourceSize/2,-_sourceSize/2,_sourceSize,_sourceSize);
 }
 
 void SourceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -32,23 +33,38 @@ void SourceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 QString SourceItem::getType()
 {
-	return QString("Source");
+	return QString("source");
 }
 
-SourceOptions::source_params SourceItem::getParams()
+sourceParams SourceItem::getParams()
 {
-	return SourceOptions::source_params(name, type, signal, this->pos().rx(), this->pos().ry());
+	return _params;
 }
 
-void SourceItem::setParams(SourceOptions::source_params params)
+void SourceItem::on_positionIsSet()
 {
-	name = params.name;
-	type = params.sourceType;
-	signal = params.signalType;
-	this->setPos(params.x, params.y);
+	auto params = _params;
+	params.x = this->pos().toPoint().x();
+	params.y = this->pos().toPoint().y();
+	setParams(params);
 }
 
-void SourceItem::on_optionsButton_clicked()
+void SourceItem::setParams(sourceParams params)
 {
-
+	auto prevBoundingRect = boundingRect();
+	bool name_has_changed = 0;
+	if (params.name != _params.name)
+		name_has_changed = 1;
+	_params = params;
+	auto newCoordinates = QPointF(_params.x, _params.y);
+	setPos(newCoordinates);
+	auto curBoundingRect = boundingRect();
+	if (name_has_changed)
+		emit nameChanged(this);
+	emit paramsChanged(_params);
+	if (this->scene())
+	{
+		this->scene()->update(mapRectToScene(prevBoundingRect));
+		this->scene()->update(mapRectToScene(curBoundingRect));
+	}
 }

@@ -17,10 +17,13 @@ public:
 	explicit MoveItem(QObject *parent = 0);
 	~MoveItem();
 	virtual QString getType() = 0;
+	virtual QString getName() = 0;
 
 signals:
 	void itemSelected(MoveItem *);
 	void itemDragged(MoveItem *);
+	void positionIsSet();
+	void nameChanged(MoveItem *);
 
 private:
 	QRectF boundingRect() const;
