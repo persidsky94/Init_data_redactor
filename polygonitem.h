@@ -44,6 +44,8 @@ private:
 	QString getType();
 	void on_positionIsSet();
 
+	void setDefaultVertexParams();
+
 //	QPointF calculateValidCoordinates(QPointF newCoordinates);
 	VertexItem *createChildVertex(int index, qreal localx, qreal localy);
 	void moveAllVertecesBy(qreal x, qreal y);
@@ -54,6 +56,7 @@ private:
 	void bindVertexSignals(VertexItem *);
 
 	polygonParams _params;
+	vertexParams _defaultVertexParams;
 	QVector<VertexItem *> pVertices;
 	QPolygonF verticesPolygon;
 };

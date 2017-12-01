@@ -3,6 +3,7 @@
 PolygonItem::PolygonItem(polygonParams params, QObject *parent)
 	: MoveItem(parent), _params(params)
 {
+	setDefaultVertexParams();
 	this->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
 	connect(this, &PolygonItem::positionIsSet, this, &PolygonItem::on_positionIsSet);
 //	QPointF pos = QPointF(200,200);
@@ -14,13 +15,22 @@ PolygonItem::PolygonItem(polygonParams params, QObject *parent)
 	createChildVertex(vertexIndex, vertexLocalx, vertexLocaly);
 }
 
+void PolygonItem::setDefaultVertexParams()
+{
+	vertexParams params;
+	params.name = QString("Vertex");
+	params.x = 0;
+	params.y = 0;
+	_defaultVertexParams = params;
+}
+
 VertexItem *PolygonItem::createChildVertex(int index, qreal localx, qreal localy)
 {
 	if (index >= pVertices.size())
 		index = pVertices.size();
 	if (index < 0)
 		index = 0;
-	VertexItem *vertex = new VertexItem(this);
+	VertexItem *vertex = new VertexItem(_defaultVertexParams, this);
 	vertex->setParentItem(this);
 	vertex->setPos(localx, localy);
 	pVertices.insert(index, vertex);
@@ -29,6 +39,7 @@ VertexItem *PolygonItem::createChildVertex(int index, qreal localx, qreal localy
 	if ((localx < 0) || (localy < 0))
 		updatePolygonPosToTopLeftOfVerticesBoundingRect();
 	emit childVertexCreated(this, vertex);
+	return vertex;
 }
 
 void PolygonItem::updatePolygonPosToTopLeftOfVerticesBoundingRect()
@@ -163,7 +174,7 @@ void PolygonItem::on_vertexAskToClone(VertexItem *clonedVertex)
 	}
 	if (i != -1)
 	{
-		VertexItem *newVertex = new VertexItem(this);
+		VertexItem *newVertex = new VertexItem(_defaultVertexParams, this);
 		/* TODO: case when clonedVertex is close to the border */
 		QPointF clonedPos = clonedVertex->pos();
 		newVertex->setPos(clonedPos.rx()-2, clonedPos.ry()-2);

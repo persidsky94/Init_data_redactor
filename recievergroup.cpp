@@ -47,7 +47,7 @@ QString RecieverGroup::getType()
 	return QString("reciever group");
 }
 
-recieverGroupParams RecieverGroup::getParams()
+recieverGroupParams RecieverGroup::getParams() const
 {
 	return _params;
 }
@@ -80,6 +80,7 @@ void RecieverGroup::setParams(recieverGroupParams params)
 	}
 }
 
+/*
 QPointF RecieverGroup::calculateValidCoordinates(QPointF newCoordinates)
 {
 	QRectF sceneBR = this->scene()->sceneRect();
@@ -101,3 +102,4 @@ QPointF RecieverGroup::calculateValidCoordinates(QPointF newCoordinates)
 	QPointF validCoordinates = (this->pos() + realOffset);
 	return validCoordinates;
 }
+*/

@@ -18,7 +18,7 @@ public:
 	QString getName() {return getParams().name;}
 
 signals:
-	void paramsChanged(sourceParams params);
+	void paramsChanged(sourceParams& params);
 
 private:
 	QRectF boundingRect() const;
@@ -26,7 +26,7 @@ private:
 	QString getType();
 	void on_positionIsSet();
 
-	static int _sourceSize = 12;
+	const static int _sourceSize = 12;
 	sourceParams _params;
 };
 

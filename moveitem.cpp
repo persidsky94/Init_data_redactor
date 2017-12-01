@@ -35,11 +35,13 @@ void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	auto newCoordinates = this->pos() + (event->pos() - event->lastPos());
 	auto validCoordinates = calculateValidCoordinates(newCoordinates);//this->pos() + (event->pos() - event->lastPos());//calculateValidCoordinates(event->pos());
 	this->setPos(validCoordinates);
+	emit positionIsSet();
 	itemDragged(this);
 }
 
 QPointF MoveItem::calculateValidCoordinates(QPointF newCoordinates)
 {
+	/*
 	QRectF sceneRect = (this->scene())->sceneRect();
 	auto newx = mapToScene(mapFromParent(newCoordinates)).rx();
 	auto newy = mapToScene(mapFromParent(newCoordinates)).ry();
@@ -49,6 +51,8 @@ QPointF MoveItem::calculateValidCoordinates(QPointF newCoordinates)
 	newy = std::min(newy, sceneRect.bottom());
 	QPointF validCoordinates = mapToParent(mapFromScene(QPointF(newx, newy)));
 	return validCoordinates;
+	*/
+	return newCoordinates;
 }
 
 void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

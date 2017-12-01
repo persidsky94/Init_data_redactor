@@ -12,7 +12,7 @@ class RecieverGroup: public MoveItem
 public:
 	explicit RecieverGroup(recieverGroupParams params, QObject *parent);
 	~RecieverGroup();
-	recieverGroupParams getParams();
+	recieverGroupParams getParams() const;
 	void setParams(recieverGroupParams params);
 	QString getName() {return getParams().name;}
 
@@ -26,7 +26,7 @@ private:
 	QString getType();
 	void on_positionIsSet();
 
-	static int _singleRecieverThickness = 6;
+	const static int _singleRecieverThickness = 6;
 	recieverGroupParams _params;
 };
 

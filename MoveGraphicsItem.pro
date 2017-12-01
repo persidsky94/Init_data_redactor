@@ -28,31 +28,40 @@ SOURCES += main.cpp\
     mainwindow.cpp \
     gridscene.cpp \
     sourceitem.cpp \
-    recieveritem.cpp \
     vertexitem.cpp \
     polygonitem.cpp \
     recievergroup.cpp \
-    recievergroupeditor.cpp \
-    sourceeditor.cpp
+    vertexeditor.cpp \
+    polygoneditor.cpp \
+    editorsmanager.cpp \
+    sourceinfo.cpp \
+    sourceeditor.cpp \
+    recievergroupinfo.cpp \
+    recievergroupeditor.cpp
 
 HEADERS  += \
     moveitem.h \
     mainwindow.h \
     gridscene.h \
     sourceitem.h \
-    recieveritem.h \
     vertexitem.h \
     polygonitem.h \
-    moveitem_copy.h \
     recievergroupparams.h \
     recievergroup.h \
-    recievergroupeditor.h \
     sourceparams.h \
-    sourceeditor.h \
     vertexparams.h \
-    polygonparams.h
+    polygonparams.h \
+    vertexeditor.h \
+    polygoneditor.h \
+    editorsmanager.h \
+    sourceinfo.h \
+    sourceeditor.h \
+    recievergroupinfo.h \
+    recievergroupeditor.h
 
 FORMS    += \
     mainwindow.ui \
-    recievergroupeditor.ui \
-    sourceeditor.ui
+    vertexeditor.ui \
+    polygoneditor.ui \
+    sourceinfo.ui \
+    recievergroupinfo.ui

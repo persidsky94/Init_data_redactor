@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDialog>
+#include <QDialogButtonBox>
 
 static int randomBetween(int low, int high)
 {
@@ -11,31 +13,41 @@ MainWindow::MainWindow(QMainWindow *parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-
-	this->showMaximized();
-
-	scene = new GridScene(this);
-	scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex/*NoIndex*/);
+	bindActions();
+	setDefaultSourceParams();
+//	setDefaultRecieverGroupParams();
+	//this->ui->centralWidget->layout()->setSizeConstraint();
+	_editorsManager = new EditorsManager(this);
+	_scene = new GridScene(this);
+//	_editorsManager->getWidget()->setS
+	bindSceneAndEditorsManager();
+	this->ui->sceneWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	this->ui->centralWidget->layout()->addWidget(_editorsManager->getWidget());
+	_scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex/*NoIndex*/);
 	setSceneSize(800,600);
 
-	ui->graphicsView->setScene(scene);
+	ui->graphicsView->setScene(_scene);
 	setViewOptions();
 	updateGraphicsViewSize();
 
 	ui->graphicsView->setMouseTracking(true);
 
-	connect(scene, SIGNAL(mouseAt(QPointF)), this, SLOT(on_sceneMouseMoved(QPointF)));
+	this->showMaximized();
+
+//	connect(_scene, SIGNAL(mouseAt(QPointF)), this, SLOT(on_sceneMouseMoved(QPointF)));
 }
 
 void MainWindow::setSceneSize(int width, int height)
 {
 	sceneSizex = width;
 	sceneSizey = height;
+	/*
 	ui->xBox->setMaximum(sceneSizex);
 	ui->yBox->setMaximum(sceneSizey);
 	ui->mousex->setMaximum(sceneSizex);
 	ui->mousey->setMaximum(sceneSizey);
-	scene->setSceneRect(0,0,sceneSizex, sceneSizey);
+	*/
+	_scene->setSceneRect(0,0,sceneSizex, sceneSizey);
 }
 
 void MainWindow::setViewOptions()
@@ -53,37 +65,59 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionAddSource_triggered()
 {
-	SourceOptions *dialog = new SourceOptions(this, scene->sceneRect(), SourceOptions::source_params());
+	auto dialog = new QDialog;
+	auto layout = new QVBoxLayout(dialog);
+	auto initEditor = new SourceInfo(dialog);
+	initEditor->initWithParams(_defaultSourceParams);
+	initEditor->show();
+	auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
+	layout->addWidget(initEditor);
+	layout->addWidget(buttonBox);
+	connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
 	if (dialog->exec())
 	{
-		SourceOptions::source_params params = dialog->getParams();
-		MoveItem *item = new SourceItem(params, this);
-		scene->addItem(item);
+		auto params = initEditor->constructParams();
+		addNewSourceItem(params);
 	}
 	delete dialog;
 }
 
+/*
 void MainWindow::on_actionAddReciever_triggered()
 {
-	MoveItem *item = new RecieverItem(this);
-	item->setPos(randomBetween(30, 470),
-				 randomBetween(30,470));
-	scene->addItem(item);
+	auto dialog = new QDialog;
+	auto layout = new QVBoxLayout(dialog);
+//	auto initEditor = new SourceInfo(dialog);
+	initEditor->initWithParams(_defaultSourceParams);
+	initEditor->show();
+	auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
+	layout->addWidget(initEditor);
+	layout->addWidget(buttonBox);
+	connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
+	if (dialog->exec())
+	{
+		auto params = initEditor->constructParams();
+		addNewSourceItem(params);
+	}
+	delete dialog;
 }
-
+*/
+/*
 void MainWindow::on_actionAddVertex_triggered()
 {
 	MoveItem *item = new VertexItem(this);
 	item->setPos(randomBetween(30, 470),
 				 randomBetween(30,470));
-	scene->addItem(item);
+	_scene->addItem(item);
 }
 
 void MainWindow::on_actionAddPolygon_triggered()
 {
 	MoveItem *item = new PolygonItem(this);
 	item->setPos(0,0);
-	scene->addItem(item);
+	_scene->addItem(item);
 }
 
 void MainWindow::on_itemSelected(MoveItem *item)
@@ -125,7 +159,7 @@ void MainWindow::on_itemOptionsButton_clicked()
 		if (selectedItem->getType() == QString("Source"))
 		{
 			auto source = ((SourceItem *)selectedItem);
-			SourceOptions *dialog = new SourceOptions(this, scene->sceneRect(), source->getParams());
+			SourceOptions *dialog = new SourceOptions(this, _scene->sceneRect(), source->getParams());
 			if (dialog->exec())
 			{
 				SourceOptions::source_params params = dialog->getParams();
@@ -146,7 +180,7 @@ void MainWindow::deleteSelectedItem()
 {
 	if (selectedItem != NULL)
 	{
-		scene->removeItem(selectedItem);
+		_scene->removeItem(selectedItem);
 		delete selectedItem;
 		selectedItem = NULL;
 	}
@@ -158,7 +192,7 @@ void MainWindow::emptySelectionBox()
 	ui->yBox->setValue(0);
 	ui->type->setText("");
 }
-
+*/
 void MainWindow::on_actionZoomIn_triggered()
 {
 	ui->graphicsView->scale(1.2, 1.2);
@@ -173,8 +207,8 @@ void MainWindow::on_actionZoomOut_triggered()
 
 void MainWindow::updateGraphicsViewSize()
 {
-	QPointF zoomedSceneFarCorner = ui->graphicsView->mapFromScene(scene->sceneRect().bottomRight());
-	QPointF zoomedSceneZeroCorner = ui->graphicsView->mapFromScene(scene->sceneRect().topLeft());
+	QPointF zoomedSceneFarCorner = ui->graphicsView->mapFromScene(_scene->sceneRect().bottomRight());
+	QPointF zoomedSceneZeroCorner = ui->graphicsView->mapFromScene(_scene->sceneRect().topLeft());
 	int sceneWidth = zoomedSceneFarCorner.rx() - zoomedSceneZeroCorner.rx();
 	int sceneHeight = zoomedSceneFarCorner.ry() - zoomedSceneZeroCorner.ry();
 	ui->graphicsView->setMaximumSize(sceneWidth+scrollbarThikness, sceneHeight+scrollbarThikness);
@@ -183,13 +217,63 @@ void MainWindow::updateGraphicsViewSize()
 	this->updateGeometry();
 }
 
+/*
 void MainWindow::on_sceneMouseMoved(QPointF mousePosition)
 {
 	ui->mousex->setValue(mousePosition.rx());
 	ui->mousey->setValue(mousePosition.ry());
 }
+*/
 
 void MainWindow::on_actionOpen_in_new_window_triggered()
 {
 	auto newCalc = new MainWindow();
 }
+
+void MainWindow::addNewSourceItem(sourceParams params)
+{
+	auto src = new SourceItem(params, this);
+	addItemToScene(src);
+	src->itemSelected(src);
+}
+
+void MainWindow::addItemToScene(MoveItem *item)
+{
+	_scene->addItem(item);
+	bindItemToScene(item);
+	emit itemAddedToScene(item);
+}
+
+void MainWindow::bindSceneAndEditorsManager()
+{
+	QObject::connect(_scene, &GridScene::sceneItemSelected, _editorsManager, &EditorsManager::changeRedactedItem);
+}
+
+void MainWindow::bindItemToScene(MoveItem *item)
+{
+	QObject::connect(item, &MoveItem::itemSelected, _scene, &GridScene::on_sceneItemSelected);
+	QObject::connect(item, &MoveItem::nameChanged, _scene, &GridScene::on_itemNameChanged);
+}
+
+void MainWindow::bindActions()
+{
+	//connect(this->ui->actionAddSource, &QAction::triggered, this, &MainWindow::on_actionAddSource_triggered);
+}
+
+void MainWindow::setDefaultSourceParams()
+{
+	_defaultSourceParams.name = QString("Source");
+	_defaultSourceParams.x = 0;
+	_defaultSourceParams.y = 0;
+	_defaultSourceParams.signalType = sourceParams::Sin;
+}
+/*
+void MainWindow::setDefaultRecieverGroupParams()
+{
+	_defaultRecieverGroupParams.name = QString("Recievers horizontal group");
+	_defaultRecieverGroupParams.firstx = 0;
+	_defaultRecieverGroupParams.deltax = 10;
+	_defaultRecieverGroupParams.y = 100;
+	_defaultRecieverGroupParams.recieversNumber = 20;
+}
+*/

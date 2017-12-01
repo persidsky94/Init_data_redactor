@@ -14,6 +14,8 @@ public:
 	explicit VertexItem(vertexParams params, QObject *parent = 0);
 	~VertexItem();
 	vertexParams getParams();
+	void setParams(vertexParams params);
+	QString getName() {return getParams().name;}
 
 signals:
 	void vertexMoved(VertexItem *);
@@ -21,13 +23,19 @@ signals:
 	void vertexAskToClone(VertexItem *);
 	void vertexDeleted(VertexItem *);
 
+	void paramsChanged(vertexParams params);
+
 private:
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 	QString getType();
+	void on_positionIsSet();
 
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *);
 	void mousePressEvent(QGraphicsSceneMouseEvent *);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+	vertexParams _params;
 };
 
 #endif // VERTEXITEM_H

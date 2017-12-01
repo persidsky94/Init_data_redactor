@@ -66,4 +66,24 @@ void GridScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	emit mouseAt(event->scenePos());
 }
 
+void GridScene::on_sceneItemSelected(MoveItem *item)
+{
+	emit sceneItemSelected(item);
+}
+
+void GridScene::on_itemNameChanged(MoveItem *item)
+{
+	emit sceneItemNameChanged(item);
+}
+
+void GridScene::on_selectSceneItem(MoveItem *item)
+{
+	emit sceneItemSelected(item);
+}
+
+void GridScene::on_deleteSceneItem(MoveItem *item)
+{
+	emit sceneItemDeleted(item);
+	this->removeItem(item);
+}
 

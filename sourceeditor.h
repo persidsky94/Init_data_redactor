@@ -2,33 +2,34 @@
 #define SOURCEEDITOR_H
 
 #include <QWidget>
+#include <QPushButton>
 
-#include <sourceparams.h>
+#include <sourceinfo.h>
 
-namespace Ui {
-class SourceEditor;
-}
-
-class SourceEditor : public QWidget
+class SourceEditor : public QObject
 {
 	Q_OBJECT
-
+	
 public:
-	explicit SourceEditor(QWidget *parent = 0);
+	explicit SourceEditor(QWidget *parent = nullptr);
 	~SourceEditor();
+	void addSelfToLayout(QLayout *layout);
 	void initWithParams(sourceParams params);
-	sourceParams constructParams();
-
-signals: //to item
-	void setParams(sourceParams params);
-
+	void show();
+	void hide();
+	
+signals:
+	void setParams(sourceParams &params);
+	
 private:
-	Ui::SourceEditor *ui;
-
-	void setBoxEnums();
-	void setMaxValues(QRectF sceneBR);
+	QWidget *_widget;
+	SourceInfo *_paramsInfo;
+	QPushButton *_setButton;
+	
 //slots from item
 	void updateParams(sourceParams params);
+//slots from ui
+	void on_setButton_clicked();
 };
 
 #endif // SOURCEEDITOR_H

@@ -1,13 +1,45 @@
 #include "vertexitem.h"
 
-VertexItem::VertexItem(QObject *parent)
-	: MoveItem(parent)
+VertexItem::VertexItem(vertexParams params, QObject *parent)
+	: MoveItem(parent), _params(params)
 {
+	connect(this, &VertexItem::positionIsSet, this, &VertexItem::on_positionIsSet);
+	setParams(params);
 }
 
 VertexItem::~VertexItem()
 {
 	emit vertexDeleted(this);
+}
+
+void VertexItem::setParams(vertexParams params)
+{
+	/*
+	auto prevBoundingRect = boundingRect();
+	bool name_has_changed = 0;
+	if (params.name != _params.name)
+		name_has_changed = 1;
+	_params = params;
+	auto newCoordinates = QPointF(_params.x, _params.y);
+	setPos(newCoordinates);
+	auto curBoundingRect = boundingRect();
+	if (name_has_changed)
+		emit nameChanged(this);
+	emit paramsChanged(_params);
+	if (this->scene())
+	{
+		this->scene()->update(mapRectToScene(prevBoundingRect));
+		this->scene()->update(mapRectToScene(curBoundingRect));
+	}
+	*/
+}
+
+void VertexItem::on_positionIsSet()
+{
+	auto params = _params;
+	params.x = this->pos().toPoint().x();
+	params.y = this->pos().toPoint().y();
+	setParams(params);
 }
 
 QRectF VertexItem::boundingRect() const
@@ -50,4 +82,9 @@ void VertexItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
 	MoveItem::mouseReleaseEvent(event);
 	emit vertexMoveFinished(this);
+}
+
+vertexParams VertexItem::getParams()
+{
+	return _params;
 }

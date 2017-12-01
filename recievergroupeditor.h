@@ -1,32 +1,17 @@
 #ifndef RECIEVERGROUPEDITOR_H
 #define RECIEVERGROUPEDITOR_H
 
-#include <QWidget>
+#include <QObject>
 
-#include <recievergroupparams.h>
-
-namespace Ui {
-class RecieverGroupEditor;
-}
-
-class RecieverGroupEditor : public QWidget
+class RecieverGroupEditor : public QObject
 {
 	Q_OBJECT
-
 public:
-	explicit RecieverGroupEditor(QWidget *parent = 0);
-	~RecieverGroupEditor();
-	void initWithParams(recieverGroupParams params);
-	recieverGroupParams constructParams();
+	explicit RecieverGroupEditor(QObject *parent = nullptr);
 
-signals: //to item
-	void setParams(recieverGroupParams params);
+signals:
 
-private:
-	Ui::RecieverGroupEditor *ui;
-
-//slots from item
-	void updateParams(recieverGroupParams params);
+public slots:
 };
 
 #endif // RECIEVERGROUPEDITOR_H

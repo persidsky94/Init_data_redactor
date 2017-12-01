@@ -10,5 +10,5 @@ struct polygonParams
 	// x,y - top left bounding rect coordinates
 	double x;
 	double y;
-}
+};
 #endif // POLYGONPARAMS_H

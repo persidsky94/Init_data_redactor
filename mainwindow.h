@@ -5,10 +5,11 @@
 #include <QGraphicsScene>
 
 #include <gridscene.h>
+#include <editorsmanager.h>
 #include <sourceitem.h>
-#include <recieveritem.h>
-#include <vertexitem.h>
-#include <polygonitem.h>
+#include <recievergroup.h>
+//#include <vertexitem.h>
+//#include <polygonitem.h>
 
 namespace Ui {
 class MainWindow;
@@ -23,32 +24,50 @@ public:
 	~MainWindow();
 	void updateGraphicsViewSize();
 
+signals://to items list
+	void itemAddedToScene(MoveItem *newItem);
+
 private:
 	void setSceneSize(int width, int height);
 	void setViewOptions();
-	void fillSelectionBox();
-	void emptySelectionBox();
-	void deleteSelectedItem();
+//	void fillSelectionBox();
+//	void emptySelectionBox();
+//	void deleteSelectedItem();
+
+	void addNewSourceItem(sourceParams params);
+//	void addNewRecieverGroup(recieverGroupParams params);
+	void addItemToScene(MoveItem *item);
+	void bindSceneAndEditorsManager();
+	void bindItemToScene(MoveItem *item);
+	void bindActions();
+	void setDefaultSourceParams();
+//	void setDefaultRecieverGroupParams();
 
 private slots:
 	void on_actionOpen_in_new_window_triggered();
 	void on_actionAddSource_triggered();
-	void on_actionAddReciever_triggered();
-	void on_actionAddVertex_triggered();
-	void on_actionAddPolygon_triggered();
-	void on_setItemCoordinatesButton_clicked();
-	void on_itemOptionsButton_clicked();
-	void on_deleteItemButton_clicked();
-	void on_itemSelected(MoveItem *selectedItem);
-	void on_itemDragged(MoveItem *draggedItem);
+//	void on_actionAddReciever_triggered();
+	//void on_actionAddVertex_triggered();
+	//void on_actionAddPolygon_triggered();
+	//void on_setItemCoordinatesButton_clicked();
+	//void on_itemOptionsButton_clicked();
+	//void on_deleteItemButton_clicked();
+//	void on_itemSelected(MoveItem *selectedItem);
+//	void on_itemDragged(MoveItem *draggedItem);
 	void on_actionZoomIn_triggered();
 	void on_actionZoomOut_triggered();
-	void on_sceneMouseMoved(QPointF mousePosition);
+//	void on_sceneMouseMoved(QPointF mousePosition);
 
 
 private:
 	Ui::MainWindow *ui;
-	QGraphicsScene *scene;
+
+	GridScene *_scene;
+	EditorsManager *_editorsManager = NULL;
+
+	sourceParams _defaultSourceParams;
+//	recieverGroupParams _defaultRecieverGroupParams;
+
 	int sceneSizex;
 	int sceneSizey;
 	MoveItem *selectedItem = NULL;

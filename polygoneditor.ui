@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SourceEditor</class>
- <widget class="QWidget" name="SourceEditor">
+ <class>PolygonEditor</class>
+ <widget class="QWidget" name="PolygonEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>285</width>
+    <width>251</width>
     <height>151</height>
    </rect>
   </property>
@@ -23,12 +23,18 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="nameLine"/>
+     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>signal type</string>
+        <string>density</string>
        </property>
       </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QDoubleSpinBox" name="densityBox"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
@@ -44,25 +50,11 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="nameLine"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="signalTypeComboBox"/>
-     </item>
      <item row="2" column="1">
-      <widget class="QDoubleSpinBox" name="xBox">
-       <property name="maximum">
-        <double>9999.989999999999782</double>
-       </property>
-      </widget>
+      <widget class="QDoubleSpinBox" name="xBox"/>
      </item>
      <item row="3" column="1">
-      <widget class="QDoubleSpinBox" name="yBox">
-       <property name="maximum">
-        <double>9999.989999999999782</double>
-       </property>
-      </widget>
+      <widget class="QDoubleSpinBox" name="yBox"/>
      </item>
     </layout>
    </item>

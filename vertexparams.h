@@ -6,8 +6,8 @@
 struct vertexParams
 {
 	QString name;
-	int x;
-	int y;
-}
+	qreal x;
+	qreal y;
+};
 
 #endif // VERTEXPARAMS_H

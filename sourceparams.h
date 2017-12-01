@@ -5,18 +5,16 @@
 #include <QString>
 #include <QMetaEnum>
 
-class sourceParams
-{
-	Q_OBJECT
-	Q_ENUMS(SignalType)
 
-public:
+
+struct sourceParams
+{
 	enum SignalType {Sin, Cos};
 
 	QString name;
 	SignalType signalType;
 	int x;
 	int y;
-}
+};
 
 #endif // SOURCEPARAMS_H
