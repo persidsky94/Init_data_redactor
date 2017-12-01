@@ -19,14 +19,15 @@ public:
 	void initWithParams(recieverGroupParams params);
 	recieverGroupParams constructParams();
 
+	//for editor
+	void updateParams(recieverGroupParams params);
+
 signals: //to item
 	void setParams(recieverGroupParams params);
 
 private:
 	Ui::RecieverGroupInfo *ui;
 
-//slots from item
-	void updateParams(recieverGroupParams params);
 };
 
 #endif // RECIEVERGROUPINFO_H

@@ -35,18 +35,18 @@ private:
 //	void deleteSelectedItem();
 
 	void addNewSourceItem(sourceParams params);
-//	void addNewRecieverGroup(recieverGroupParams params);
+	void addNewRecieverGroup(recieverGroupParams params);
 	void addItemToScene(MoveItem *item);
 	void bindSceneAndEditorsManager();
 	void bindItemToScene(MoveItem *item);
 	void bindActions();
 	void setDefaultSourceParams();
-//	void setDefaultRecieverGroupParams();
+	void setDefaultRecieverGroupParams();
 
 private slots:
 	void on_actionOpen_in_new_window_triggered();
 	void on_actionAddSource_triggered();
-//	void on_actionAddReciever_triggered();
+	void on_actionAddReciever_triggered();
 	//void on_actionAddVertex_triggered();
 	//void on_actionAddPolygon_triggered();
 	//void on_setItemCoordinatesButton_clicked();
@@ -66,7 +66,7 @@ private:
 	EditorsManager *_editorsManager = NULL;
 
 	sourceParams _defaultSourceParams;
-//	recieverGroupParams _defaultRecieverGroupParams;
+	recieverGroupParams _defaultRecieverGroupParams;
 
 	int sceneSizex;
 	int sceneSizey;

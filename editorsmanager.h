@@ -5,7 +5,7 @@
 
 #include <moveitem.h>
 #include <sourceeditor.h>
-#include <recievergroupinfo.h>
+#include <recievergroupeditor.h>
 #include <vertexeditor.h>
 #include <polygoneditor.h>
 
@@ -22,8 +22,8 @@ private:
 	MoveItem *redactedItem;
 	QWidget *_widget;
 	SourceEditor *sourceEditor;
-	RecieverGroupInfo *recieverEditor;
-	PolygonEditor *polygonEditor;
+	RecieverGroupEditor *recieverEditor;
+//	PolygonEditor *polygonEditor;
 
 	void unbindRedactedItem();
 	void bindRedactedItem();

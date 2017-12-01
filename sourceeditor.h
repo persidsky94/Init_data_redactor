@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QObject>
 
 #include <sourceinfo.h>
 
@@ -19,7 +20,7 @@ public:
 	void hide();
 	
 signals:
-	void setParams(sourceParams &params);
+	void setParams(sourceParams params);
 	
 private:
 	QWidget *_widget;

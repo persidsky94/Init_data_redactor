@@ -15,11 +15,10 @@ MainWindow::MainWindow(QMainWindow *parent) :
 	ui->setupUi(this);
 	bindActions();
 	setDefaultSourceParams();
-//	setDefaultRecieverGroupParams();
+	setDefaultRecieverGroupParams();
 	//this->ui->centralWidget->layout()->setSizeConstraint();
 	_editorsManager = new EditorsManager(this);
 	_scene = new GridScene(this);
-//	_editorsManager->getWidget()->setS
 	bindSceneAndEditorsManager();
 	this->ui->sceneWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	this->ui->centralWidget->layout()->addWidget(_editorsManager->getWidget());
@@ -83,13 +82,12 @@ void MainWindow::on_actionAddSource_triggered()
 	delete dialog;
 }
 
-/*
 void MainWindow::on_actionAddReciever_triggered()
 {
 	auto dialog = new QDialog;
 	auto layout = new QVBoxLayout(dialog);
-//	auto initEditor = new SourceInfo(dialog);
-	initEditor->initWithParams(_defaultSourceParams);
+	auto initEditor = new RecieverGroupInfo(dialog);
+	initEditor->initWithParams(_defaultRecieverGroupParams);
 	initEditor->show();
 	auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
 	layout->addWidget(initEditor);
@@ -99,11 +97,11 @@ void MainWindow::on_actionAddReciever_triggered()
 	if (dialog->exec())
 	{
 		auto params = initEditor->constructParams();
-		addNewSourceItem(params);
+		addNewRecieverGroup(params);
 	}
 	delete dialog;
 }
-*/
+
 /*
 void MainWindow::on_actionAddVertex_triggered()
 {
@@ -237,6 +235,13 @@ void MainWindow::addNewSourceItem(sourceParams params)
 	src->itemSelected(src);
 }
 
+void MainWindow::addNewRecieverGroup(recieverGroupParams params)
+{
+	auto src = new RecieverGroup(params, this);
+	addItemToScene(src);
+	src->itemSelected(src);
+}
+
 void MainWindow::addItemToScene(MoveItem *item)
 {
 	_scene->addItem(item);
@@ -267,7 +272,7 @@ void MainWindow::setDefaultSourceParams()
 	_defaultSourceParams.y = 0;
 	_defaultSourceParams.signalType = sourceParams::Sin;
 }
-/*
+
 void MainWindow::setDefaultRecieverGroupParams()
 {
 	_defaultRecieverGroupParams.name = QString("Recievers horizontal group");
@@ -276,4 +281,3 @@ void MainWindow::setDefaultRecieverGroupParams()
 	_defaultRecieverGroupParams.y = 100;
 	_defaultRecieverGroupParams.recieversNumber = 20;
 }
-*/

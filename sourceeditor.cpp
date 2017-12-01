@@ -12,8 +12,6 @@ SourceEditor::SourceEditor(QWidget *parent) : QObject(parent)
 	auto label = new QLabel("Source editor");
 	_paramsInfo = new SourceInfo(_widget);
 	_setButton = new QPushButton(QString("set"), _widget);
-//	auto vSpacer = new QSpacerItem;
-//	vSpacer->set
 	layout->addWidget(label);
 	layout->addWidget(_paramsInfo);
 	layout->addWidget(_setButton);

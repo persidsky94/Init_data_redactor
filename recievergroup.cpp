@@ -14,7 +14,7 @@ RecieverGroup::~RecieverGroup()
 QRectF RecieverGroup::boundingRect() const
 {
 	auto params = getParams();
-	return QRectF(0, 0, params.deltax*params.recieversNumber, _singleRecieverThickness);
+	return QRectF(-_singleRecieverThickness/2, -_singleRecieverThickness/2, params.deltax*params.recieversNumber, _singleRecieverThickness);
 }
 
 void RecieverGroup::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -25,21 +25,21 @@ void RecieverGroup::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	painter->setBrush(Qt::yellow);
 	std::vector<float> recieversXCoordinates;
 	auto params = getParams();
-	float currentXCoordinate = params.firstx;
+	float currentXCoordinate = 0;
 	for (int i=0; i<params.recieversNumber; ++i)
 	{
 		recieversXCoordinates.push_back(currentXCoordinate);
 		currentXCoordinate += params.deltax;
 	}
 	for (auto coord : recieversXCoordinates)
-		drawSingleReciever(painter, coord, params.y);
+		drawSingleReciever(painter, coord);
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 }
 
-void RecieverGroup::drawSingleReciever(QPainter *painter, float x, float y)
+void RecieverGroup::drawSingleReciever(QPainter *painter, float x)
 {
-	painter->drawRect(x-_singleRecieverThickness, y-_singleRecieverThickness, _singleRecieverThickness, _singleRecieverThickness);
+	painter->drawRect(x-_singleRecieverThickness/2, -_singleRecieverThickness/2, _singleRecieverThickness, _singleRecieverThickness);
 }
 
 QString RecieverGroup::getType()

@@ -11,14 +11,14 @@ EditorsManager::EditorsManager(QWidget *parent) : QObject(parent)
 	_widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 	redactedItem = NULL;
 	sourceEditor = new SourceEditor(this->getWidget());
-	//recieverEditor = new RecieverGroupInfo(this->getWidget());
+	recieverEditor = new RecieverGroupEditor(this->getWidget());
 	//polygonEditor = new PolygonEditor(this->getWidget());
 	auto layout = new QVBoxLayout();
 	sourceEditor->addSelfToLayout(layout);
-	//recieverEditor->addSelfToLayout(layout);
+	recieverEditor->addSelfToLayout(layout);
 	//polygonEditor->addSelfToLayout(layout);
 	sourceEditor->hide();
-	//recieverEditor->hide();
+	recieverEditor->hide();
 	//polygonEditor->hide();
 	_widget->setLayout(layout);
 }
@@ -45,6 +45,10 @@ void EditorsManager::hideActiveRedactor()
 		{
 			sourceEditor->hide();
 		}
+		if (redactedItem->getType() == QString("reciever group"))
+		{
+			recieverEditor->hide();
+		}
 //TODO: add other item types
 		else
 		{
@@ -61,6 +65,10 @@ void EditorsManager::showActiveRedactor()
 		{
 			sourceEditor->show();
 		}
+		if (redactedItem->getType() == QString("reciever group"))
+		{
+			recieverEditor->show();
+		}
 //TODO: add other item types
 		else
 		{
@@ -76,6 +84,10 @@ void EditorsManager::unbindRedactedItem()
 		if (redactedItem->getType() == QString("source"))
 		{
 			QObject::disconnect(sourceEditor, 0, 0, 0);
+		}
+		if (redactedItem->getType() == QString("reciever group"))
+		{
+			QObject::disconnect(recieverEditor, 0, 0, 0);
 		}
 //TODO: add other item types
 		else
@@ -95,6 +107,13 @@ void EditorsManager::bindRedactedItem()
 			QObject::connect(srcItem, &SourceItem::paramsChanged, sourceEditor, &SourceEditor::initWithParams);
 			QObject::connect(sourceEditor, &SourceEditor::setParams, srcItem, &SourceItem::setParams);
 			sourceEditor->initWithParams(srcItem->getParams());
+		}
+		if (redactedItem->getType() == QString("reciever group"))
+		{
+			RecieverGroup *rcvItem = dynamic_cast<RecieverGroup *>(redactedItem);
+			QObject::connect(rcvItem, &RecieverGroup::paramsChanged, recieverEditor, &RecieverGroupEditor::initWithParams);
+			QObject::connect(recieverEditor, &RecieverGroupEditor::setParams, rcvItem, &RecieverGroup::setParams);
+			recieverEditor->initWithParams(rcvItem->getParams());
 		}
 //TODO: add other item types
 		else

@@ -2,6 +2,7 @@
 #define RECIEVERGROUP_H
 
 #include <QObject>
+#include <QString>
 
 #include <recievergroupparams.h>
 #include <moveitem.h>
@@ -22,11 +23,11 @@ signals:
 private:
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	void drawSingleReciever(QPainter *painter, float x, float y);
+	void drawSingleReciever(QPainter *painter, float x);
 	QString getType();
 	void on_positionIsSet();
 
-	const static int _singleRecieverThickness = 6;
+	const static int _singleRecieverThickness = 12;
 	recieverGroupParams _params;
 };
 
