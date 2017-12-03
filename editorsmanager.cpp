@@ -72,7 +72,7 @@ void EditorsManager::showActiveRedactor()
 //TODO: add other item types
 		else
 		{
-			std::cout << "Unknown MoveItem type selected" << std::endl;
+			std::cout << " EditorsManager::showActiveRedactor: " << "Unknown MoveItem type selected: " << redactedItem->getType() << std::endl;
 		}
 	}
 }
@@ -92,7 +92,7 @@ void EditorsManager::unbindRedactedItem()
 //TODO: add other item types
 		else
 		{
-			std::cout << "Unknown MoveItem type selected" << std::endl;
+			std::cout << " EditorsManager::unbindRedactedItem: " << "Unknown MoveItem type selected" << redactedItem->getType() << std::endl;
 		}
 	}
 }
@@ -118,7 +118,7 @@ void EditorsManager::bindRedactedItem()
 //TODO: add other item types
 		else
 		{
-			std::cout << "Unknown MoveItem type selected" << std::endl;
+			std::cout << " EditorsManager::bindRedactedItem: " << "Unknown MoveItem type selected" << redactedItem->getType() << std::endl;
 		}
 	}
 }
