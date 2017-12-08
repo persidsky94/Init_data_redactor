@@ -8,8 +8,8 @@
 #include <editorsmanager.h>
 #include <sourceitem.h>
 #include <recievergroup.h>
-//#include <vertexitem.h>
-//#include <polygonitem.h>
+#include <vertexitem.h>
+#include <polygonitem.h>
 
 namespace Ui {
 class MainWindow;
@@ -25,7 +25,7 @@ public:
 	void updateGraphicsViewSize();
 
 signals://to items list
-	void itemAddedToScene(MoveItem *newItem);
+	void itemAddedToScene(MoveItem *newItem, int listIndex);
 
 private:
 	void setSceneSize(int width, int height);
@@ -36,19 +36,22 @@ private:
 
 	void addNewSourceItem(sourceParams params);
 	void addNewRecieverGroup(recieverGroupParams params);
+	void addNewPolygonItem(polygonParams params);
 	void addItemToScene(MoveItem *item);
+
 	void bindSceneAndEditorsManager();
 	void bindItemToScene(MoveItem *item);
 	void bindActions();
 	void setDefaultSourceParams();
 	void setDefaultRecieverGroupParams();
+	void setDefaultPolygonParams();
 
 private slots:
 	void on_actionOpen_in_new_window_triggered();
 	void on_actionAddSource_triggered();
 	void on_actionAddReciever_triggered();
 	//void on_actionAddVertex_triggered();
-	//void on_actionAddPolygon_triggered();
+	void on_actionAddPolygon_triggered();
 	//void on_setItemCoordinatesButton_clicked();
 	//void on_itemOptionsButton_clicked();
 	//void on_deleteItemButton_clicked();
@@ -64,14 +67,19 @@ private:
 
 	GridScene *_scene;
 	EditorsManager *_editorsManager = NULL;
+	ItemListManager *_listManager = NULL;
 
 	sourceParams _defaultSourceParams;
 	recieverGroupParams _defaultRecieverGroupParams;
+	polygonParams _defaultPolygonParams;
 
 	int sceneSizex;
 	int sceneSizey;
 	MoveItem *selectedItem = NULL;
 	const int scrollbarThikness = 16;
+
+	void bindSceneAndItemListManager();
+	void bindSelfAndItemListManager();
 };
 
 #endif // MAINWINDOW_H

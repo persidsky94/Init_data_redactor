@@ -6,8 +6,9 @@
 #include <moveitem.h>
 #include <sourceeditor.h>
 #include <recievergroupeditor.h>
-#include <vertexeditor.h>
 #include <polygoneditor.h>
+#include <vertexinfo.h>
+#include <polygoninfo.h>
 
 class EditorsManager : public QObject
 {
@@ -23,8 +24,10 @@ private:
 	QWidget *_widget;
 	SourceEditor *sourceEditor;
 	RecieverGroupEditor *recieverEditor;
-//	PolygonEditor *polygonEditor;
+	PolygonEditor *polygonEditor;
 
+	bool needToChangeRedactedItem(MoveItem *newRedactedItem);
+	MoveItem *proxyNewRedactedItem(MoveItem *newRedactedItem);
 	void unbindRedactedItem();
 	void bindRedactedItem();
 	void setRedactedItem(MoveItem *newItem);

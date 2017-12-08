@@ -14,7 +14,6 @@ VertexItem::~VertexItem()
 
 void VertexItem::setParams(vertexParams params)
 {
-	/*
 	auto prevBoundingRect = boundingRect();
 	bool name_has_changed = 0;
 	if (params.name != _params.name)
@@ -31,7 +30,6 @@ void VertexItem::setParams(vertexParams params)
 		this->scene()->update(mapRectToScene(prevBoundingRect));
 		this->scene()->update(mapRectToScene(curBoundingRect));
 	}
-	*/
 }
 
 void VertexItem::on_positionIsSet()
@@ -61,7 +59,7 @@ void VertexItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 QString VertexItem::getType()
 {
-	return QString("Polygon vertex");
+	return QString("vertex");
 }
 
 void VertexItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)

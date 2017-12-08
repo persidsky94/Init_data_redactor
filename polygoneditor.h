@@ -2,32 +2,54 @@
 #define POLYGONEDITOR_H
 
 #include <QWidget>
+#include <QPushButton>
+#include <QObject>
 
-#include <polygonparams.h>
+#include "polygoninfo.h"
+#include "polygonitem.h"
+#include "vertexeditor.h"
+#include "vertexitem.h"
+#include "itemlistmanager.h"
 
-namespace Ui {
-class PolygonEditor;
-}
-
-class PolygonEditor : public QWidget
+class PolygonEditor : public QObject
 {
 	Q_OBJECT
-
 public:
-	explicit PolygonEditor(QWidget *parent = 0);
+	explicit PolygonEditor(QWidget *parent = nullptr);
 	~PolygonEditor();
+	void addSelfToLayout(QLayout *layout);
 	void initWithParams(polygonParams params);
-	polygonParams constructParams();
+	void makeVertexListManagerCorrespondingToPolygonItem(PolygonItem *polygon);
+	void show();
+	void hide();
 
-signals: //to item
+	void initVertexEditorWithParams(vertexParams params);
+
+	void bindVertexListManagerToSelf();
+	void rebindVertexEditor(MoveItem *newRedactedVertex);
+
+	void bindVertexListManagerToPolygon(PolygonItem *polygon);
+	void unbindVertexListManagerFromEverything();
+
+	void bindVertexEditorToVertex(VertexItem *vertex);
+	void unbindVertexEditorFromEverything();
+
+signals:
 	void setParams(polygonParams params);
 
 private:
-	Ui::PolygonEditor *ui;
+	QWidget *_widget;
+	PolygonInfo *_polygonParamsInfo;
+	ItemListManager *_vertexListManager;
+	VertexEditor *_vertexEditor;
+	QPushButton *_setPolygonParamsButton;
 
-	void setMaxValues(QRectF sceneBR);
+	void clearVertexListManager();
+
 //slots from item
 	void updateParams(polygonParams params);
+//slots from ui
+	void on_setButton_clicked();
 };
 
 #endif // POLYGONEDITOR_H

@@ -1,33 +1,52 @@
+#include <QVBoxLayout>
+#include <QLabel>
 #include "vertexeditor.h"
-#include "ui_vertexeditor.h"
 
-VertexEditor::VertexEditor(QWidget *parent) :
-	QWidget(parent),
-	ui(new Ui::VertexEditor)
+VertexEditor::VertexEditor(QWidget *parent) : QObject(parent)
 {
-	ui->setupUi(this);
+	_widget = new QWidget(parent);
+	_widget->setFixedWidth(300);
+	_widget->setStyleSheet("border: 1px solid black");
+	auto layout = new QVBoxLayout();
+	_widget->setLayout(layout);
+	auto label = new QLabel("Vertex editor");
+	_paramsInfo = new VertexInfo(_widget);
+	_setButton = new QPushButton(QString("set"), _widget);
+	layout->addWidget(label);
+	layout->addWidget(_paramsInfo);
+	layout->addWidget(_setButton);
+	layout->addStretch();
+
+	QObject::connect(this->_setButton, &QPushButton::clicked, this, &VertexEditor::on_setButton_clicked);
 }
 
 VertexEditor::~VertexEditor()
 {
-	delete ui;
+
 }
 
-void VertexEditor::setMaxValues(QRectF sceneBR)
+void VertexEditor::addSelfToLayout(QLayout *layout)
 {
-	ui->xBox->setMinimum(sceneBR.topLeft().rx());
-	ui->xBox->setMaximum(sceneBR.bottomRight().rx());
-	ui->yBox->setMinimum(sceneBR.topLeft().ry());
-	ui->yBox->setMaximum(sceneBR.bottomRight().ry());
+	if (_widget)
+		layout->addWidget(_widget);
 }
 
-vertexParams VertexEditor::constructParams()
+void VertexEditor::show()
 {
-	vertexParams params;
-	params.name = this->ui->nameLine->text();
-	params.y =  this->ui->yBox->value();
-	params.x = this->ui->xBox->value();
-	return params;
+	if (_widget)
+		_widget->show();
+}
+
+void VertexEditor::hide()
+{
+	if (_widget)
+		_widget->hide();
+}
+
+void VertexEditor::updateParams(vertexParams params)
+{
+	if (_paramsInfo)
+		_paramsInfo->updateParams(params);
 }
 
 void VertexEditor::initWithParams(vertexParams params)
@@ -35,9 +54,8 @@ void VertexEditor::initWithParams(vertexParams params)
 	updateParams(params);
 }
 
-void VertexEditor::updateParams(vertexParams params)
+void VertexEditor::on_setButton_clicked()
 {
-	this->ui->nameLine->setText(params.name);
-	this->ui->yBox->setValue(params.y);
-	this->ui->xBox->setValue(params.x);
+	if (_paramsInfo)
+		emit setParams(_paramsInfo->constructParams());
 }

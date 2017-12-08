@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PolygonEditor</class>
- <widget class="QWidget" name="PolygonEditor">
+ <class>PolygonInfo</class>
+ <widget class="QWidget" name="PolygonInfo">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -34,7 +34,11 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="densityBox"/>
+      <widget class="QDoubleSpinBox" name="densityBox">
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
@@ -51,10 +55,24 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QDoubleSpinBox" name="xBox"/>
+      <widget class="QDoubleSpinBox" name="xBox">
+       <property name="minimum">
+        <double>-1000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10000.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QDoubleSpinBox" name="yBox"/>
+      <widget class="QDoubleSpinBox" name="yBox">
+       <property name="minimum">
+        <double>-1000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10000.000000000000000</double>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

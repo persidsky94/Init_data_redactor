@@ -57,10 +57,6 @@ void SourceItem::setParams(sourceParams params)
 		name_has_changed = 1;
 
 	_params = params;
-//	_params.x = params.x;
-//	_params.y = params.y;
-//	_params.name = params.name;
-//	_params.signalType = params.signalType;
 
 	auto newCoordinates = QPointF(_params.x, _params.y);
 	setPos(newCoordinates);

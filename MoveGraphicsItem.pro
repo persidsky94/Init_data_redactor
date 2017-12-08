@@ -31,13 +31,16 @@ SOURCES += main.cpp\
     vertexitem.cpp \
     polygonitem.cpp \
     recievergroup.cpp \
-    vertexeditor.cpp \
-    polygoneditor.cpp \
     editorsmanager.cpp \
     sourceinfo.cpp \
     sourceeditor.cpp \
     recievergroupinfo.cpp \
-    recievergroupeditor.cpp
+    recievergroupeditor.cpp \
+    vertexinfo.cpp \
+    vertexeditor.cpp \
+    polygoninfo.cpp \
+    polygoneditor.cpp \
+    itemlistmanager.cpp
 
 HEADERS  += \
     moveitem.h \
@@ -51,17 +54,20 @@ HEADERS  += \
     sourceparams.h \
     vertexparams.h \
     polygonparams.h \
-    vertexeditor.h \
-    polygoneditor.h \
     editorsmanager.h \
     sourceinfo.h \
     sourceeditor.h \
     recievergroupinfo.h \
-    recievergroupeditor.h
+    recievergroupeditor.h \
+    vertexinfo.h \
+    vertexeditor.h \
+    polygoninfo.h \
+    polygoneditor.h \
+    itemlistmanager.h
 
 FORMS    += \
     mainwindow.ui \
-    vertexeditor.ui \
-    polygoneditor.ui \
     sourceinfo.ui \
-    recievergroupinfo.ui
+    recievergroupinfo.ui \
+    vertexinfo.ui \
+    polygoninfo.ui

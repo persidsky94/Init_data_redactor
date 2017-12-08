@@ -16,11 +16,17 @@ MainWindow::MainWindow(QMainWindow *parent) :
 	bindActions();
 	setDefaultSourceParams();
 	setDefaultRecieverGroupParams();
+	setDefaultPolygonParams();
 	//this->ui->centralWidget->layout()->setSizeConstraint();
 	_editorsManager = new EditorsManager(this);
+	bool needDuplicateButton = false;
+	_listManager = new ItemListManager(this, needDuplicateButton);
 	_scene = new GridScene(this);
 	bindSceneAndEditorsManager();
+	bindSceneAndItemListManager();
+	bindSelfAndItemListManager();
 	this->ui->sceneWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	this->ui->centralWidget->layout()->addWidget(_listManager->getWidget());
 	this->ui->centralWidget->layout()->addWidget(_editorsManager->getWidget());
 	_scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex/*NoIndex*/);
 	setSceneSize(800,600);
@@ -102,19 +108,32 @@ void MainWindow::on_actionAddReciever_triggered()
 	delete dialog;
 }
 
+void MainWindow::on_actionAddPolygon_triggered()
+{
+	auto dialog = new QDialog;
+	auto layout = new QVBoxLayout(dialog);
+	auto initEditor = new PolygonInfo(dialog);
+	initEditor->initWithParams(_defaultPolygonParams);
+	initEditor->show();
+	auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
+	layout->addWidget(initEditor);
+	layout->addWidget(buttonBox);
+	connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
+	if (dialog->exec())
+	{
+		auto params = initEditor->constructParams();
+		addNewPolygonItem(params);
+	}
+	delete dialog;
+}
+
 /*
 void MainWindow::on_actionAddVertex_triggered()
 {
 	MoveItem *item = new VertexItem(this);
 	item->setPos(randomBetween(30, 470),
 				 randomBetween(30,470));
-	_scene->addItem(item);
-}
-
-void MainWindow::on_actionAddPolygon_triggered()
-{
-	MoveItem *item = new PolygonItem(this);
-	item->setPos(0,0);
 	_scene->addItem(item);
 }
 
@@ -242,11 +261,32 @@ void MainWindow::addNewRecieverGroup(recieverGroupParams params)
 	src->itemSelected(src);
 }
 
+void MainWindow::addNewPolygonItem(polygonParams params)
+{
+	auto poly = new PolygonItem(params, this);
+	addItemToScene(poly);
+	poly->itemSelected(poly);
+}
+
 void MainWindow::addItemToScene(MoveItem *item)
 {
 	_scene->addItem(item);
 	bindItemToScene(item);
-	emit itemAddedToScene(item);
+	emit itemAddedToScene(item, 0);
+}
+
+void MainWindow::bindSelfAndItemListManager()
+{
+	QObject::connect(this, &MainWindow::itemAddedToScene, _listManager, &ItemListManager::on_itemAddedToContainer);
+}
+
+void MainWindow::bindSceneAndItemListManager()
+{
+	QObject::connect(_scene, &GridScene::sceneItemNameChanged, _listManager, &ItemListManager::on_containerItemNameChanged);
+	QObject::connect(_scene, &GridScene::sceneItemSelected, _listManager, &ItemListManager::on_itemSelectedInContainer);
+	QObject::connect(_scene, &GridScene::sceneItemDeleted, _listManager, &ItemListManager::on_itemDeletedFromContainer);
+	QObject::connect(_listManager, &ItemListManager::selectContainerItem, _scene, &GridScene::on_selectSceneItem);
+	QObject::connect(_listManager, &ItemListManager::deleteContainerItemByPtr, _scene, &GridScene::on_deleteSceneItem);
 }
 
 void MainWindow::bindSceneAndEditorsManager()
@@ -280,4 +320,12 @@ void MainWindow::setDefaultRecieverGroupParams()
 	_defaultRecieverGroupParams.deltax = 10;
 	_defaultRecieverGroupParams.y = 100;
 	_defaultRecieverGroupParams.recieversNumber = 20;
+}
+
+void MainWindow::setDefaultPolygonParams()
+{
+	_defaultPolygonParams.name = QString("Polygon");
+	_defaultPolygonParams.density = 1000;
+	_defaultPolygonParams.x = 30;
+	_defaultPolygonParams.y = 30;
 }

@@ -2,32 +2,35 @@
 #define VERTEXEDITOR_H
 
 #include <QWidget>
+#include <QPushButton>
+#include <QObject>
 
-#include <vertexparams.h>
+#include <vertexinfo.h>
 
-namespace Ui {
-class VertexEditor;
-}
-
-class VertexEditor : public QWidget
+class VertexEditor : public QObject
 {
 	Q_OBJECT
 
 public:
-	explicit VertexEditor(QWidget *parent = 0);
+	explicit VertexEditor(QWidget *parent = nullptr);
 	~VertexEditor();
+	void addSelfToLayout(QLayout *layout);
 	void initWithParams(vertexParams params);
-	vertexParams constructParams();
+	void show();
+	void hide();
 
-signals: //to item
+signals:
 	void setParams(vertexParams params);
 
 private:
-	Ui::VertexEditor *ui;
+	QWidget *_widget;
+	VertexInfo *_paramsInfo;
+	QPushButton *_setButton;
 
-	void setMaxValues(QRectF sceneBR);
 //slots from item
 	void updateParams(vertexParams params);
+//slots from ui
+	void on_setButton_clicked();
 };
 
 #endif // VERTEXEDITOR_H

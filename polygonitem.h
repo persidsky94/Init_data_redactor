@@ -15,6 +15,7 @@
 class PolygonItem : public MoveItem
 {
 	Q_OBJECT
+	friend class ItemListManager;
 public:
 	explicit PolygonItem(polygonParams params, QObject *parent = 0);
 	~PolygonItem();
@@ -23,17 +24,24 @@ public:
 	QString getName() {return getParams().name;}
 	QRectF getBoundingRect();
 
+public slots:
+	//from vertexListManager
+	void on_duplicateVertex(int vertexIndex);
+	void on_deleteVertex(int vertexIndex);
+
 signals:
 	void paramsChanged(polygonParams params);
 	void childVertexParamsChanged(vertexParams params);
-	void childVertexCreated(PolygonItem *polygon, VertexItem *vertex);
-	void childVertexDeleted(VertexItem *vertex);
+
+	void childVertexCreated(MoveItem *vertex, int index);
+	void childVertexDeleted(MoveItem *vertex);
+	void childVertexSelected(VertexItem *vertex);
 
 private slots:
 	void on_vertexMoved(VertexItem *);
 	void on_childVertexMoveFinished(VertexItem *);
-	void on_vertexAskToClone(VertexItem *);
-	void on_vertexDeleted(VertexItem *);
+//	void on_vertexAskToClone(VertexItem *);
+//	void on_vertexDeleted(VertexItem *);
 
 	void on_itemSelected(MoveItem *);
 	void on_itemDragged(MoveItem *);
@@ -47,7 +55,9 @@ private:
 	void setDefaultVertexParams();
 
 //	QPointF calculateValidCoordinates(QPointF newCoordinates);
+	void deleteSelfFromScene();
 	VertexItem *createChildVertex(int index, qreal localx, qreal localy);
+	void deleteChildVertex(int index);
 	void moveAllVertecesBy(qreal x, qreal y);
 	void movePolygon(qreal scenex, qreal sceney);
 	void updatePolygonPosToTopLeftOfVerticesBoundingRect();

@@ -1,19 +1,19 @@
-#include "vertexinfo.h"
-#include "ui_vertexinfo.h"
+#include "polygoninfo.h"
+#include "ui_polygoninfo.h"
 
-VertexInfo::VertexInfo(QWidget *parent) :
+PolygonInfo::PolygonInfo(QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::VertexInfo)
+	ui(new Ui::PolygonInfo)
 {
 	ui->setupUi(this);
 }
 
-VertexInfo::~VertexInfo()
+PolygonInfo::~PolygonInfo()
 {
 	delete ui;
 }
 
-void VertexInfo::setMaxValues(QRectF sceneBR)
+void PolygonInfo::setMaxValues(QRectF sceneBR)
 {
 	ui->xBox->setMinimum(sceneBR.topLeft().rx());
 	ui->xBox->setMaximum(sceneBR.bottomRight().rx());
@@ -21,23 +21,25 @@ void VertexInfo::setMaxValues(QRectF sceneBR)
 	ui->yBox->setMaximum(sceneBR.bottomRight().ry());
 }
 
-vertexParams VertexInfo::constructParams()
+polygonParams PolygonInfo::constructParams()
 {
-	vertexParams params;
+	polygonParams params;
 	params.name = this->ui->nameLine->text();
+	params.density = this->ui->densityBox->value();
 	params.y =  this->ui->yBox->value();
 	params.x = this->ui->xBox->value();
 	return params;
 }
 
-void VertexInfo::initWithParams(vertexParams params)
+void PolygonInfo::initWithParams(polygonParams params)
 {
 	updateParams(params);
 }
 
-void VertexInfo::updateParams(vertexParams params)
+void PolygonInfo::updateParams(polygonParams params)
 {
 	this->ui->nameLine->setText(params.name);
+	this->ui->densityBox->setValue(params.density);
 	this->ui->yBox->setValue(params.y);
 	this->ui->xBox->setValue(params.x);
 }

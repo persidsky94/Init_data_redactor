@@ -1,4 +1,5 @@
 #include "polygonitem.h"
+#include <iostream>
 
 PolygonItem::PolygonItem(polygonParams params, QObject *parent)
 	: MoveItem(parent), _params(params)
@@ -9,6 +10,7 @@ PolygonItem::PolygonItem(polygonParams params, QObject *parent)
 //	QPointF pos = QPointF(200,200);
 //	this->setPos(pos);
 	setParams(params);
+
 	int vertexIndex = 0;
 	qreal vertexLocalx = 0;
 	qreal vertexLocaly = 0;
@@ -38,7 +40,8 @@ VertexItem *PolygonItem::createChildVertex(int index, qreal localx, qreal localy
 	updateVerticesPolygon();
 	if ((localx < 0) || (localy < 0))
 		updatePolygonPosToTopLeftOfVerticesBoundingRect();
-	emit childVertexCreated(this, vertex);
+	emit childVertexCreated(vertex, index);
+	emit childVertexSelected(vertex);
 	return vertex;
 }
 
@@ -76,6 +79,7 @@ void PolygonItem::movePolygon(qreal scenex, qreal sceney)
 
 PolygonItem::~PolygonItem()
 {
+
 }
 
 QRectF PolygonItem::boundingRect() const
@@ -146,8 +150,8 @@ void PolygonItem::bindVertexSignals(VertexItem *vertex)
 {
 	connect(vertex, SIGNAL(vertexMoved(VertexItem*)), this, SLOT(on_vertexMoved(VertexItem*)));
 	connect(vertex, SIGNAL(vertexMoveFinished(VertexItem*)), this, SLOT(on_childVertexMoveFinished(VertexItem *)));
-	connect(vertex, SIGNAL(vertexAskToClone(VertexItem*)), this, SLOT(on_vertexAskToClone(VertexItem*)));
-	connect(vertex, SIGNAL(vertexDeleted(VertexItem*)), this, SLOT(on_vertexDeleted(VertexItem*)));
+//	connect(vertex, SIGNAL(vertexAskToClone(VertexItem*)), this, SLOT(on_vertexAskToClone(VertexItem*)));
+//	connect(vertex, SIGNAL(vertexDeleted(VertexItem*)), this, SLOT(on_vertexDeleted(VertexItem*)));
 }
 
 void PolygonItem::on_vertexMoved(VertexItem *movedVertex)
@@ -163,19 +167,67 @@ void PolygonItem::on_childVertexMoveFinished(VertexItem *movedVertex)
 		updatePolygonPosToTopLeftOfVerticesBoundingRect();
 }
 
+void PolygonItem::on_duplicateVertex(int vertexIndex)
+{
+	if (vertexIndex < 0 || vertexIndex >= pVertices.size())
+	{
+		std::cout << "PolygonItem::on_duplicateVertex: vertexIndex is out of range: index = " << vertexIndex << ", size = " << pVertices.size() << std::endl;
+		return;
+	}
+	QPointF clonedPos = pVertices[vertexIndex]->pos();
+	createChildVertex(vertexIndex, clonedPos.rx()-2, clonedPos.ry()-2);
+}
+
+void PolygonItem::on_deleteVertex(int vertexIndex)
+{
+	if (vertexIndex < 0 || vertexIndex >= pVertices.size())
+	{
+		std::cout << "PolygonItem::on_deleteVertex: vertexIndex is out of range: index = " << vertexIndex << ", size = " << pVertices.size() << std::endl;
+		return;
+	}
+	deleteChildVertex(vertexIndex);
+}
+
+void PolygonItem::deleteChildVertex(int vertexIndex)
+{
+	if (vertexIndex < 0 || vertexIndex >= pVertices.size())
+	{
+		std::cout << "PolygonItem::deleteChildVertex: vertexIndex is out of range: index = " << vertexIndex << ", size = " << pVertices.size() << std::endl;
+		return;
+	}
+	if ((pVertices.size() == 1))
+		deleteSelfFromScene();
+	else
+	{
+		auto deletedVertex = pVertices[vertexIndex];
+		emit childVertexDeleted(deletedVertex);
+		pVertices.remove(vertexIndex);
+		this->scene()->removeItem(deletedVertex);
+		emit childVertexSelected(pVertices[0]);
+		updateVerticesPolygon();
+		this->update();
+	}
+}
+
+void PolygonItem::deleteSelfFromScene()
+{
+	this->scene()->removeItem(this);
+}
+
+/*
 void PolygonItem::on_vertexAskToClone(VertexItem *clonedVertex)
 {
 	int i = -1;
 	for (int j = 0; j<pVertices.size(); ++j)
 	{
-		/* FIXME: vertices are compared by their position (because '==' is deleted) */
+		// FIXME: vertices are compared by their position (because '==' is deleted)
 		if (pVertices[j]->pos() == clonedVertex->pos())
 			i = j;
 	}
 	if (i != -1)
 	{
 		VertexItem *newVertex = new VertexItem(_defaultVertexParams, this);
-		/* TODO: case when clonedVertex is close to the border */
+		// TODO: case when clonedVertex is close to the border
 		QPointF clonedPos = clonedVertex->pos();
 		newVertex->setPos(clonedPos.rx()-2, clonedPos.ry()-2);
 		newVertex->setParentItem(this);
@@ -185,13 +237,14 @@ void PolygonItem::on_vertexAskToClone(VertexItem *clonedVertex)
 		this->update();
 	}
 }
-
+*/
+/*
 void PolygonItem::on_vertexDeleted(VertexItem *deletedVertex)
 {
 	int i = -1;
 	for (int j = 0; j<pVertices.size(); ++j)
 	{
-		/* FIXME: vertices are compared by their position (because '==' is deleted) */
+		// FIXME: vertices are compared by their position (because '==' is deleted)
 		if (pVertices[j]->pos() == deletedVertex->pos())
 			i = j;
 	}
@@ -207,7 +260,7 @@ void PolygonItem::on_vertexDeleted(VertexItem *deletedVertex)
 		}
 	}
 }
-
+*/
 void PolygonItem::on_itemSelected(MoveItem *selectedItem)
 {
 	emit itemSelected(selectedItem);
