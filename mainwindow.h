@@ -6,6 +6,7 @@
 
 #include <gridscene.h>
 #include <editorsmanager.h>
+#include <sceneserializer.h>
 #include <sourceitem.h>
 #include <recievergroup.h>
 #include <vertexitem.h>
@@ -62,12 +63,17 @@ private slots:
 //	void on_sceneMouseMoved(QPointF mousePosition);
 
 
+	void on_actionSaveModel_triggered();
+	void on_actionLoadModel_triggered();
+
 private:
 	Ui::MainWindow *ui;
 
 	GridScene *_scene;
 	EditorsManager *_editorsManager = NULL;
 	ItemListManager *_listManager = NULL;
+	SceneSerializer *_serializer;
+
 
 	sourceParams _defaultSourceParams;
 	recieverGroupParams _defaultRecieverGroupParams;
@@ -77,6 +83,9 @@ private:
 	int sceneSizey;
 	MoveItem *selectedItem = NULL;
 	const int scrollbarThikness = 16;
+
+	void serializeScene();
+	void deserializeScene();
 
 	void bindSceneAndItemListManager();
 	void bindSelfAndItemListManager();

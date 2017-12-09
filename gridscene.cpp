@@ -87,3 +87,14 @@ void GridScene::on_deleteSceneItem(MoveItem *item)
 	this->removeItem(item);
 }
 
+void GridScene::addItem(QGraphicsItem *item)
+{
+	_itemContainer.addItemToContainer(dynamic_cast<MoveItem *>(item));
+	QGraphicsScene::addItem(item);
+}
+
+void GridScene::removeItem(QGraphicsItem *item)
+{
+	_itemContainer.deleteItemFromContainer(dynamic_cast<MoveItem *>(item));
+	QGraphicsScene::removeItem(item);
+}

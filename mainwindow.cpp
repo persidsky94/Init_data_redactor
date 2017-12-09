@@ -39,6 +39,8 @@ MainWindow::MainWindow(QMainWindow *parent) :
 
 	this->showMaximized();
 
+	_serializer = new SceneSerializer();
+	QObject::connect(_serializer, &SceneSerializer::addItemToScene, this, &MainWindow::addItemToScene);
 //	connect(_scene, SIGNAL(mouseAt(QPointF)), this, SLOT(on_sceneMouseMoved(QPointF)));
 }
 
@@ -328,4 +330,28 @@ void MainWindow::setDefaultPolygonParams()
 	_defaultPolygonParams.density = 1000;
 	_defaultPolygonParams.x = 30;
 	_defaultPolygonParams.y = 30;
+}
+
+void MainWindow::serializeScene()
+{
+	auto filename = QString("D:/Code/123.mdl");
+	_serializer->serializeSceneToFile(_scene->getItemContainer(), filename);
+}
+
+void MainWindow::deserializeScene()
+{
+	auto filename = QString("D:/Code/123.mdl");
+	_serializer->deserializeFromFileToScene(_scene, filename);
+}
+
+void MainWindow::on_actionSaveModel_triggered()
+{
+	serializeScene();
+}
+
+void MainWindow::on_actionLoadModel_triggered()
+{
+	//_scene->clear();
+	//clear container
+	deserializeScene();
 }
