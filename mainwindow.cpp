@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QFile>
+#include <QFileDialog>
 
 static int randomBetween(int low, int high)
 {
@@ -131,13 +133,6 @@ void MainWindow::on_actionAddPolygon_triggered()
 }
 
 /*
-void MainWindow::on_actionAddVertex_triggered()
-{
-	MoveItem *item = new VertexItem(this);
-	item->setPos(randomBetween(30, 470),
-				 randomBetween(30,470));
-	_scene->addItem(item);
-}
 
 void MainWindow::on_itemSelected(MoveItem *item)
 {
@@ -150,68 +145,8 @@ void MainWindow::on_itemDragged(MoveItem *draggedItem)
 	selectedItem = draggedItem;
 	fillSelectionBox();
 }
-
-void MainWindow::fillSelectionBox()
-{
-	if (selectedItem != NULL)
-	{
-		QPointF itemCoordOnScene = selectedItem->mapToScene(QPointF(0,0));
-		ui->xBox->setValue(itemCoordOnScene.rx());
-		ui->yBox->setValue(itemCoordOnScene.ry());
-		ui->type->setText(selectedItem->getType());
-	}
-}
-
-void MainWindow::on_setItemCoordinatesButton_clicked()
-{
-	if (selectedItem != NULL)
-	{
-		QPointF newCoordinates = QPointF(ui->xBox->value(), ui->yBox->value());
-		selectedItem->setPos(newCoordinates);
-	}
-}
-
-void MainWindow::on_itemOptionsButton_clicked()
-{
-	if (selectedItem != NULL)
-	{
-		if (selectedItem->getType() == QString("Source"))
-		{
-			auto source = ((SourceItem *)selectedItem);
-			SourceOptions *dialog = new SourceOptions(this, _scene->sceneRect(), source->getParams());
-			if (dialog->exec())
-			{
-				SourceOptions::source_params params = dialog->getParams();
-				source->setParams(params);
-			}
-			delete dialog;
-		}
-	}
-}
-
-void MainWindow::on_deleteItemButton_clicked()
-{
-	deleteSelectedItem();
-	emptySelectionBox();
-}
-
-void MainWindow::deleteSelectedItem()
-{
-	if (selectedItem != NULL)
-	{
-		_scene->removeItem(selectedItem);
-		delete selectedItem;
-		selectedItem = NULL;
-	}
-}
-
-void MainWindow::emptySelectionBox()
-{
-	ui->xBox->setValue(0);
-	ui->yBox->setValue(0);
-	ui->type->setText("");
-}
 */
+
 void MainWindow::on_actionZoomIn_triggered()
 {
 	ui->graphicsView->scale(1.2, 1.2);
@@ -334,13 +269,14 @@ void MainWindow::setDefaultPolygonParams()
 
 void MainWindow::serializeScene()
 {
-	auto filename = QString("D:/Code/123.mdl");
+	auto filename = QFileDialog::getSaveFileName(this, "Choose where to save model", QDir::currentPath());
+	QFile::remove(filename);
 	_serializer->serializeSceneToFile(_scene->getItemContainer(), filename);
 }
 
 void MainWindow::deserializeScene()
 {
-	auto filename = QString("D:/Code/123.mdl");
+	auto filename = QFileDialog::getOpenFileName(this, "Choose from where to load model", QDir::currentPath());
 	_serializer->deserializeFromFileToScene(_scene, filename);
 }
 

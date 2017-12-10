@@ -37,12 +37,30 @@ void SceneSerializer::serializeSources(std::vector<SourceItem *> *sources, QData
 
 void SceneSerializer::serializeRecievers(std::vector<RecieverGroup *> *recievers, QDataStream &stream)
 {
-
+	stream << quint16(recievers->size());
+	for (auto &reciever: *recievers)
+	{
+		serializeSingleReciever(reciever, stream);
+	}
 }
 
 void SceneSerializer::serializePolygons(std::vector<PolygonItem *> *polygons, QDataStream &stream)
 {
+	stream << quint16(polygons->size());
+	for (auto &polygon: *polygons)
+	{
+		serializeSinglePolygon(polygon, stream);
+	}
+}
 
+void SceneSerializer::serializePolygonVertices(PolygonItem *polygon, QDataStream &stream)
+{
+	auto vertices = polygon->getVertices();
+	stream << quint16(vertices.size());
+	for (auto &vertex: vertices)
+	{
+		serializeSingleVertex(vertex, stream);
+	}
 }
 
 void SceneSerializer::serializeSingleSource(SourceItem *source, QDataStream &stream)
@@ -54,27 +72,83 @@ void SceneSerializer::serializeSingleSource(SourceItem *source, QDataStream &str
 	stream << params.y;
 }
 
+void SceneSerializer::serializeSingleReciever(RecieverGroup *recieverGroup, QDataStream &stream)
+{
+	auto params = recieverGroup->getParams();
+	stream << params.name;
+	stream << params.recieversNumber;
+	stream << params.deltax;
+	stream << params.firstx;
+	stream << params.y;
+}
+
+void SceneSerializer::serializeSinglePolygon(PolygonItem *polygon, QDataStream &stream)
+{
+	serializePolygonParams(polygon, stream);
+	serializePolygonVertices(polygon, stream);
+}
+
+void SceneSerializer::serializePolygonParams(PolygonItem *polygon, QDataStream &stream)
+{
+	auto params = polygon->getParams();
+	stream << params.name;
+	stream << params.density;
+	stream << params.x;
+	stream << params.y;
+}
+
+void SceneSerializer::serializeSingleVertex(VertexItem *vertex, QDataStream &stream)
+{
+	auto params = vertex->getParams();
+	stream << params.name;
+	stream << params.x;
+	stream << params.y;
+}
+
 void SceneSerializer::deserializeSources(QDataStream &stream, GridScene *scene)
 {
 	qint16 numSources;
 	stream >> numSources;
 	for (qint16 i=0; i < numSources; ++i)
 	{
-		deserializeSingleSource(scene, stream);
+		deserializeSingleSource(stream, scene);
 	}
 }
 
 void SceneSerializer::deserializeRecievers(QDataStream &stream, GridScene *scene)
 {
-
+	qint16 numRecievers;
+	stream >> numRecievers;
+	for (qint16 i=0; i < numRecievers; ++i)
+	{
+		deserializeSingleReciever(stream, scene);
+	}
 }
 
 void SceneSerializer::deserializePolygons(QDataStream &stream, GridScene *scene)
 {
-
+	qint16 numPolygons;
+	stream >> numPolygons;
+	for (qint16 i=0; i < numPolygons; ++i)
+	{
+		deserializeSinglePolygon(stream, scene);
+	}
 }
 
-void SceneSerializer::deserializeSingleSource(GridScene *scene, QDataStream &stream)
+std::vector<VertexItem *> SceneSerializer::deserializePolygonVertices(QDataStream &stream)
+{
+	qint16 numVertices;
+	stream >> numVertices;
+	std::vector<VertexItem *> vertices;
+	for (qint16 i=0; i < numVertices; ++i)
+	{
+		auto vertex = deserializeSingleVertex(stream);
+		vertices.push_back(vertex);
+	}
+	return vertices;
+}
+
+void SceneSerializer::deserializeSingleSource(QDataStream &stream, GridScene *scene)
 {
 	sourceParams params;
 	stream >> params.name;
@@ -87,4 +161,47 @@ void SceneSerializer::deserializeSingleSource(GridScene *scene, QDataStream &str
 	auto source = new SourceItem(params, scene);
 	//scene->addItem(source);
 	emit addItemToScene(source);
+}
+
+void SceneSerializer::deserializeSingleReciever(QDataStream &stream, GridScene *scene)
+{
+	recieverGroupParams params;
+	stream >> params.name;
+	stream >> params.recieversNumber;
+	stream >> params.deltax;
+	stream >> params.firstx;
+	stream >> params.y;
+
+	auto reciever = new RecieverGroup(params, scene);
+	//scene->addItem(source);
+	emit addItemToScene(reciever);
+}
+
+void SceneSerializer::deserializeSinglePolygon(QDataStream &stream, GridScene *scene)
+{
+	auto params = deserializePolygonParams(stream);
+	auto vertices = deserializePolygonVertices(stream);
+	auto polygon = new PolygonItem(params, vertices, scene);
+	emit addItemToScene(polygon);
+}
+
+polygonParams SceneSerializer::deserializePolygonParams(QDataStream &stream)
+{
+	polygonParams params;
+	stream >> params.name;
+	stream >> params.density;
+	stream >> params.x;
+	stream >> params.y;
+	return params;
+}
+
+VertexItem *SceneSerializer::deserializeSingleVertex(QDataStream &stream)
+{
+	vertexParams params;
+	stream >> params.name;
+	stream >> params.x;
+	stream >> params.y;
+
+	auto vertex = new VertexItem(params);
+	return vertex;
 }

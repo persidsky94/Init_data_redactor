@@ -7,14 +7,28 @@ PolygonItem::PolygonItem(polygonParams params, QObject *parent)
 	setDefaultVertexParams();
 	this->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
 	connect(this, &PolygonItem::positionIsSet, this, &PolygonItem::on_positionIsSet);
-//	QPointF pos = QPointF(200,200);
-//	this->setPos(pos);
 	setParams(params);
 
 	int vertexIndex = 0;
 	qreal vertexLocalx = 0;
 	qreal vertexLocaly = 0;
 	createChildVertex(vertexIndex, vertexLocalx, vertexLocaly);
+}
+
+PolygonItem::PolygonItem(polygonParams params, std::vector<VertexItem *> vertices, QObject *parent)
+	: MoveItem(parent), _params(params)
+{
+	setDefaultVertexParams();
+	this->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
+	connect(this, &PolygonItem::positionIsSet, this, &PolygonItem::on_positionIsSet);
+	setParams(params);
+	for (auto &vertex: vertices)
+	{
+		vertex->setParentItem(this);
+		bindVertexSignals(vertex);
+		pVertices.push_back(vertex);
+	}
+	updateVerticesPolygon();
 }
 
 void PolygonItem::setDefaultVertexParams()
@@ -35,7 +49,8 @@ VertexItem *PolygonItem::createChildVertex(int index, qreal localx, qreal localy
 	VertexItem *vertex = new VertexItem(_defaultVertexParams, this);
 	vertex->setParentItem(this);
 	vertex->setPos(localx, localy);
-	pVertices.insert(index, vertex);
+	//pVertices.insert(index, vertex);
+	pVertices.insert(pVertices.begin()+index, vertex);
 	bindVertexSignals(vertex);
 	updateVerticesPolygon();
 	if ((localx < 0) || (localy < 0))
@@ -201,7 +216,8 @@ void PolygonItem::deleteChildVertex(int vertexIndex)
 	{
 		auto deletedVertex = pVertices[vertexIndex];
 		emit childVertexDeleted(deletedVertex);
-		pVertices.remove(vertexIndex);
+	//	pVertices.remove(vertexIndex);
+		pVertices.erase(pVertices.begin()+vertexIndex);
 		this->scene()->removeItem(deletedVertex);
 		emit childVertexSelected(pVertices[0]);
 		updateVerticesPolygon();

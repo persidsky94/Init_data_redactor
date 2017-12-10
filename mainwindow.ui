@@ -118,6 +118,9 @@
    <property name="text">
     <string>Load initial data</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
   </action>
   <action name="actionOpen_in_new_window">
    <property name="text">

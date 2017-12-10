@@ -18,11 +18,13 @@ class PolygonItem : public MoveItem
 	friend class ItemListManager;
 public:
 	explicit PolygonItem(polygonParams params, QObject *parent = 0);
+	PolygonItem::PolygonItem(polygonParams params, std::vector<VertexItem *> vertices, QObject *parent);
 	~PolygonItem();
 	polygonParams getParams();
 	void setParams(polygonParams params);
 	QString getName() {return getParams().name;}
 	QRectF getBoundingRect();
+	std::vector<VertexItem *> getVertices(){return pVertices;}
 
 public slots:
 	//from vertexListManager
@@ -67,7 +69,8 @@ private:
 
 	polygonParams _params;
 	vertexParams _defaultVertexParams;
-	QVector<VertexItem *> pVertices;
+//	QVector<VertexItem *> pVertices;
+	std::vector<VertexItem *> pVertices;
 	QPolygonF verticesPolygon;
 };
 
