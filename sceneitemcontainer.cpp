@@ -15,6 +15,14 @@ SceneItemContainer::~SceneItemContainer()
 	delete _polygons;
 }
 
+void SceneItemContainer::clearContainer()
+{
+	_sources->clear();
+	_recievers->clear();
+	_polygons->clear();
+	emit containerCleared();
+}
+
 void SceneItemContainer::addItemToContainer(MoveItem *itemToAdd)
 {
 	if(itemToAdd->getType() == QString("source"))

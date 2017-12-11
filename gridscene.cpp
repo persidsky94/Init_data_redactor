@@ -1,14 +1,11 @@
 #include "gridscene.h"
 
-GridScene::GridScene(qreal x, qreal y, qreal w, qreal h)
-	: QGraphicsScene(x, y, w, h)
-{
-}
-
-GridScene::GridScene(QObject *parent)
+GridScene::GridScene(sceneParams params, QObject *parent)
 	: QGraphicsScene(parent)
 {
 	setBackgroundGrid();
+	setParams(params);
+	this->setItemIndexMethod(QGraphicsScene::BspTreeIndex/*NoIndex*/);
 }
 
 void GridScene::setBackgroundGrid()
@@ -41,9 +38,20 @@ void GridScene::setBackgroundGrid()
 	setBackgroundBrush( brushBackground );
 }
 
+void GridScene::drawBorders()
+{
+	auto width = _params.width;
+	auto height = _params.height;
+	auto borderPen = QPen(QColor(0,0,0));
+	auto borderPainter = new QPainter;
+	borderPainter->setPen(borderPen);
+	borderPainter->drawRect(0,0,width,height);
+}
+
 void GridScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
 	QGraphicsScene::drawBackground(painter, rect);
+	drawBorders();
 /*	int gridSize = std::min(this->height()/15, this->width()/15);
 
 	auto r = this->sceneRect();
@@ -89,12 +97,19 @@ void GridScene::on_deleteSceneItem(MoveItem *item)
 
 void GridScene::addItem(QGraphicsItem *item)
 {
-	_itemContainer.addItemToContainer(dynamic_cast<MoveItem *>(item));
+//	_itemContainer.addItemToContainer(dynamic_cast<MoveItem *>(item));
 	QGraphicsScene::addItem(item);
 }
 
 void GridScene::removeItem(QGraphicsItem *item)
 {
-	_itemContainer.deleteItemFromContainer(dynamic_cast<MoveItem *>(item));
+//	_itemContainer.deleteItemFromContainer(dynamic_cast<MoveItem *>(item));
+	emit sceneItemDeleted(dynamic_cast<MoveItem *>(item));
 	QGraphicsScene::removeItem(item);
+}
+
+void GridScene::setParams(sceneParams params)
+{
+	_params = params;
+	this->setSceneRect(0,0,params.width, params.height);
 }

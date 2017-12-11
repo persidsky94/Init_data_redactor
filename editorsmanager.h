@@ -19,6 +19,8 @@ public:
 
 	void changeRedactedItem(MoveItem *newRedactedItem);
 
+	void on_sceneCleared();
+
 private:
 	MoveItem *redactedItem;
 	QWidget *_widget;
@@ -26,6 +28,7 @@ private:
 	RecieverGroupEditor *recieverEditor;
 	PolygonEditor *polygonEditor;
 
+	void invalidateSelection();
 	bool needToChangeRedactedItem(MoveItem *newRedactedItem);
 	MoveItem *proxyNewRedactedItem(MoveItem *newRedactedItem);
 	void unbindRedactedItem();

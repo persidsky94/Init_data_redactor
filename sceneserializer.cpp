@@ -1,5 +1,7 @@
 #include "sceneserializer.h"
 #include <QFile>
+#include <QMessageBox>
+#include <iostream>
 
 SceneSerializer::SceneSerializer()
 {
@@ -11,6 +13,7 @@ void SceneSerializer::serializeSceneToFile(SceneItemContainer *container, QStrin
 	QFile file(filename);
 	file.open(QIODevice::WriteOnly);
 	QDataStream out(&file);
+	serializeSerializerVersion(out);
 	serializeSources(container->getSceneSources(), out);
 	serializeRecievers(container->getSceneRecievers(), out);
 	serializePolygons(container->getScenePolygons(), out);
@@ -21,9 +24,33 @@ void SceneSerializer::deserializeFromFileToScene(GridScene *scene, QString filen
 	QFile file(filename);
 	file.open(QIODevice::ReadOnly);
 	QDataStream in(&file);
+	if (!deserializeSerializerVersion(in))
+	{
+		QMessageBox msgBox;
+		auto text = QString("Serializer version incompatible, current version is %1").arg(serializerVersion);
+		msgBox.setText(text);
+		msgBox.exec();
+		//std::cout << "Serializer version incompatible, current version is " << serializerVersion << endl;
+		return;
+	}
 	deserializeSources(in, scene);
 	deserializeRecievers(in, scene);
 	deserializePolygons(in, scene);
+}
+
+void SceneSerializer::serializeSerializerVersion(QDataStream &stream)
+{
+	stream << qint16(serializerVersion);
+}
+
+bool SceneSerializer::deserializeSerializerVersion(QDataStream &stream)
+{
+	qint16 version;
+	stream >> version;
+	if ((int)version == serializerVersion)
+		return true;
+	else
+		return false;
 }
 
 void SceneSerializer::serializeSources(std::vector<SourceItem *> *sources, QDataStream &stream)

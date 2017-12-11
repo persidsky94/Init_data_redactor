@@ -31,6 +31,8 @@ public slots:
 
 	void on_containerItemNameChanged(MoveItem *containerItem);
 
+	void on_containerCleared();
+
 	//internal
 	void on_duplicateButtonClicked();
 	void on_deleteButtonClicked();

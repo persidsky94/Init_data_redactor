@@ -23,6 +23,16 @@ EditorsManager::EditorsManager(QWidget *parent) : QObject(parent)
 	_widget->setLayout(layout);
 }
 
+void EditorsManager::on_sceneCleared()
+{
+	invalidateSelection();
+}
+
+void EditorsManager::invalidateSelection()
+{
+	redactedItem = NULL;
+}
+
 void EditorsManager::changeRedactedItem(MoveItem *newRedactedItem)
 {
 	auto proxiedNewRedactedItem = proxyNewRedactedItem(newRedactedItem);

@@ -42,7 +42,9 @@ SOURCES += main.cpp\
     polygoneditor.cpp \
     itemlistmanager.cpp \
     sceneitemcontainer.cpp \
-    sceneserializer.cpp
+    sceneserializer.cpp \
+    scenemanager.cpp \
+    sceneinfo.cpp
 
 HEADERS  += \
     moveitem.h \
@@ -67,11 +69,15 @@ HEADERS  += \
     polygoneditor.h \
     itemlistmanager.h \
     sceneitemcontainer.h \
-    sceneserializer.h
+    sceneserializer.h \
+    scenemanager.h \
+    sceneparams.h \
+    sceneinfo.h
 
 FORMS    += \
     mainwindow.ui \
     sourceinfo.ui \
     recievergroupinfo.ui \
     vertexinfo.ui \
-    polygoninfo.ui
+    polygoninfo.ui \
+    sceneinfo.ui

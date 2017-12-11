@@ -20,6 +20,9 @@ signals:
 	void addItemToScene(MoveItem *item);
 
 private:
+	static const int serializerVersion = 2;
+
+	void serializeSerializerVersion(QDataStream& stream);
 	void serializeSources(std::vector<SourceItem *> *sources, QDataStream& stream);
 	void serializeRecievers(std::vector<RecieverGroup *> *recievers, QDataStream& stream);
 	void serializePolygons(std::vector<PolygonItem *> *polygons, QDataStream& stream);
@@ -31,6 +34,7 @@ private:
 	void serializePolygonParams(PolygonItem *polygon, QDataStream& stream);
 	void serializeSingleVertex(VertexItem *vertex, QDataStream& stream);
 
+	bool deserializeSerializerVersion(QDataStream& stream);
 	void deserializeSources(QDataStream& stream, GridScene *scene);
 	void deserializeRecievers(QDataStream& stream, GridScene *scene);
 	void deserializePolygons(QDataStream& stream, GridScene *scene);

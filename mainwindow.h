@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 
 #include <gridscene.h>
+#include <sceneinfo.h>
+#include <scenemanager.h>
 #include <editorsmanager.h>
 #include <sceneserializer.h>
 #include <sourceitem.h>
@@ -31,31 +33,23 @@ signals://to items list
 private:
 	void setSceneSize(int width, int height);
 	void setViewOptions();
-//	void fillSelectionBox();
-//	void emptySelectionBox();
-//	void deleteSelectedItem();
 
-	void addNewSourceItem(sourceParams params);
-	void addNewRecieverGroup(recieverGroupParams params);
-	void addNewPolygonItem(polygonParams params);
-	void addItemToScene(MoveItem *item);
+//	void addNewSourceItem(sourceParams params);
+//	void addNewRecieverGroup(recieverGroupParams params);
+//	void addNewPolygonItem(polygonParams params);
+//	void addItemToScene(MoveItem *item);
 
-	void bindSceneAndEditorsManager();
-	void bindItemToScene(MoveItem *item);
+//	void bindItemToScene(MoveItem *item);
 	void bindActions();
-	void setDefaultSourceParams();
-	void setDefaultRecieverGroupParams();
-	void setDefaultPolygonParams();
+//	void setDefaultSourceParams();
+//	void setDefaultRecieverGroupParams();
+//	void setDefaultPolygonParams();
 
 private slots:
 	void on_actionOpen_in_new_window_triggered();
 	void on_actionAddSource_triggered();
 	void on_actionAddReciever_triggered();
-	//void on_actionAddVertex_triggered();
 	void on_actionAddPolygon_triggered();
-	//void on_setItemCoordinatesButton_clicked();
-	//void on_itemOptionsButton_clicked();
-	//void on_deleteItemButton_clicked();
 //	void on_itemSelected(MoveItem *selectedItem);
 //	void on_itemDragged(MoveItem *draggedItem);
 	void on_actionZoomIn_triggered();
@@ -65,30 +59,33 @@ private slots:
 
 	void on_actionSaveModel_triggered();
 	void on_actionLoadModel_triggered();
+	void on_actionConfigureScene_triggered();
 
 private:
 	Ui::MainWindow *ui;
 
-	GridScene *_scene;
+//	GridScene *_scene;
+	SceneManager *_sceneManager;
 	EditorsManager *_editorsManager = NULL;
 	ItemListManager *_listManager = NULL;
-	SceneSerializer *_serializer;
+//	SceneSerializer *_serializer;
 
 
-	sourceParams _defaultSourceParams;
-	recieverGroupParams _defaultRecieverGroupParams;
-	polygonParams _defaultPolygonParams;
+//	sourceParams _defaultSourceParams;
+//	recieverGroupParams _defaultRecieverGroupParams;
+//	polygonParams _defaultPolygonParams;
 
-	int sceneSizex;
-	int sceneSizey;
-	MoveItem *selectedItem = NULL;
+//	int sceneSizex;
+//	int sceneSizey;
+//	MoveItem *selectedItem = NULL;
 	const int scrollbarThikness = 16;
 
-	void serializeScene();
-	void deserializeScene();
+//	void serializeScene();
+//	void deserializeScene();
 
-	void bindSceneAndItemListManager();
-	void bindSelfAndItemListManager();
+	void bindSceneManagerAndEditorsManager();
+	void bindSceneManagerAndItemListManager();
+	void bindSceneContainerAndItemListManager();
 };
 
 #endif // MAINWINDOW_H

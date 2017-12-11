@@ -5,6 +5,7 @@
 #include <QPointF>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include "sceneparams.h"
 #include "moveitem.h"
 #include "sceneitemcontainer.h"
 
@@ -12,8 +13,7 @@ class GridScene : public QGraphicsScene
 {
 	Q_OBJECT
 public:
-	explicit GridScene(qreal x, qreal y, qreal w, qreal h);
-	explicit GridScene(QObject *parent);
+	explicit GridScene(sceneParams params ,QObject *parent);
 	~GridScene(){}
 
 	//slots from items
@@ -27,7 +27,9 @@ public:
 	void addItem(QGraphicsItem *item);
 	void removeItem(QGraphicsItem *item);
 
-	SceneItemContainer *getItemContainer(){return &_itemContainer;}
+//	SceneItemContainer *getItemContainer(){return &_itemContainer;}
+	sceneParams getParams(){return _params;}
+	void setParams(sceneParams params);
 
 
 signals:
@@ -37,9 +39,11 @@ signals:
 	void sceneItemNameChanged(MoveItem *);
 
 private:
-	SceneItemContainer _itemContainer;
+	sceneParams _params;
+//	SceneItemContainer _itemContainer;
 
 	void setBackgroundGrid();
+	void drawBorders();
 	void drawBackground(QPainter *painter, const QRectF &rect);
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 };

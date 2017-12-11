@@ -100,6 +100,11 @@ void ItemListManager::on_deleteButtonClicked()
 	emit deleteContainerItem(_listWidget->currentRow());
 }
 
+void ItemListManager::on_containerCleared()
+{
+	clearList();
+}
+
 void ItemListManager::on_listItemSelected(QListWidgetItem *listItem)
 {
 	auto sceneItem = getContainerItemFromListItem(listItem);

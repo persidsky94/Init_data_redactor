@@ -59,6 +59,7 @@
     <addaction name="menuNew_calculation"/>
     <addaction name="actionSaveModel"/>
     <addaction name="actionLoadModel"/>
+    <addaction name="actionConfigureScene"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -157,6 +158,14 @@
    </property>
    <property name="shortcut">
     <string>Shift+V</string>
+   </property>
+  </action>
+  <action name="actionConfigureScene">
+   <property name="text">
+    <string>Configure scene</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
  </widget>
