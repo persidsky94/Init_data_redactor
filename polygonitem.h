@@ -18,7 +18,7 @@ class PolygonItem : public MoveItem
 	friend class ItemListManager;
 public:
 	explicit PolygonItem(polygonParams params, QObject *parent = 0);
-	PolygonItem::PolygonItem(polygonParams params, std::vector<VertexItem *> vertices, QObject *parent);
+    PolygonItem(polygonParams params, std::vector<VertexItem *> vertices, QObject *parent);
 	~PolygonItem();
 	polygonParams getParams();
 	void setParams(polygonParams params);

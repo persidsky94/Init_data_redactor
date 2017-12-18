@@ -32,6 +32,8 @@ public:
 	recieverGroupParams getDefaultRecieverGroupParams(){return _defaultRecieverGroupParams;}
 	polygonParams getDefaultPolygonParams(){return _defaultPolygonParams;}
 
+    void setSceneParams(sceneParams params);
+
 signals:
 	//for list manager
 	void itemAddedToScene(MoveItem *addedItem, int index);
@@ -66,8 +68,6 @@ private:
 	void doTheBindings();
 	void bindSceneToSelf();
 	void bindSerializerToSelf();
-
-	void setSceneParams(sceneParams params);
 
 	void setDefaultItemsParams();
 	void setDefaultSceneParams();
