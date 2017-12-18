@@ -25,67 +25,41 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QMainWindow *parent = 0);
 	~MainWindow();
-	void updateGraphicsViewSize();
-
-signals://to items list
-	void itemAddedToScene(MoveItem *newItem, int listIndex);
-
-private:
-	void setSceneSize(int width, int height);
-	void setViewOptions();
-
-//	void addNewSourceItem(sourceParams params);
-//	void addNewRecieverGroup(recieverGroupParams params);
-//	void addNewPolygonItem(polygonParams params);
-//	void addItemToScene(MoveItem *item);
-
-//	void bindItemToScene(MoveItem *item);
-	void bindActions();
-//	void setDefaultSourceParams();
-//	void setDefaultRecieverGroupParams();
-//	void setDefaultPolygonParams();
-
-private slots:
-	void on_actionOpen_in_new_window_triggered();
-	void on_actionAddSource_triggered();
-	void on_actionAddReciever_triggered();
-	void on_actionAddPolygon_triggered();
-//	void on_itemSelected(MoveItem *selectedItem);
-//	void on_itemDragged(MoveItem *draggedItem);
-	void on_actionZoomIn_triggered();
-	void on_actionZoomOut_triggered();
-//	void on_sceneMouseMoved(QPointF mousePosition);
-
-
-	void on_actionSaveModel_triggered();
-	void on_actionLoadModel_triggered();
-	void on_actionConfigureScene_triggered();
 
 private:
 	Ui::MainWindow *ui;
+	const int scrollbarThikness = 16;
 
-//	GridScene *_scene;
 	SceneManager *_sceneManager;
 	EditorsManager *_editorsManager = NULL;
 	ItemListManager *_listManager = NULL;
-//	SceneSerializer *_serializer;
 
 
-//	sourceParams _defaultSourceParams;
-//	recieverGroupParams _defaultRecieverGroupParams;
-//	polygonParams _defaultPolygonParams;
-
-//	int sceneSizex;
-//	int sceneSizey;
-//	MoveItem *selectedItem = NULL;
-	const int scrollbarThikness = 16;
-
-//	void serializeScene();
-//	void deserializeScene();
+	void setViewOptions();
+	void updateGraphicsViewSize();
 
 	void bindSceneManagerAndEditorsManager();
 	void bindSceneManagerAndItemListManager();
 	void bindSceneContainerAndItemListManager();
+
+private slots:
+	void on_actionOpen_in_new_window_triggered();
+	void on_actionSaveModel_triggered();
+	void on_actionLoadModel_triggered();
+	void on_actionConfigureScene_triggered();
+
+	void on_actionAddSource_triggered();
+	void on_actionAddReciever_triggered();
+	void on_actionAddPolygon_triggered();
+
+	void on_actionZoomIn_triggered();
+	void on_actionZoomOut_triggered();
+//	void on_sceneMouseMoved(QPointF mousePosition);
+//	void on_itemSelected(MoveItem *selectedItem);
+//	void on_itemDragged(MoveItem *draggedItem);
+
+
+
 };
 
 #endif // MAINWINDOW_H

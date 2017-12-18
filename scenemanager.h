@@ -23,7 +23,7 @@ public:
 	void serializeSceneToFile();
 	void deserializeSceneFromFile();
 	void changeSceneSettings();
-	void setSceneParams(sceneParams params);
+
 
 	GridScene *getScene(){return _scene;}
 	SceneItemContainer *getItemContainer(){return _itemContainer;}
@@ -66,6 +66,8 @@ private:
 	void doTheBindings();
 	void bindSceneToSelf();
 	void bindSerializerToSelf();
+
+	void setSceneParams(sceneParams params);
 
 	void setDefaultItemsParams();
 	void setDefaultSceneParams();

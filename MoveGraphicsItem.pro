@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     sceneitemcontainer.cpp \
     sceneserializer.cpp \
     scenemanager.cpp \
-    sceneinfo.cpp
+    sceneinfo.cpp \
+    toinitdataconverter.cpp
 
 HEADERS  += \
     moveitem.h \
@@ -72,7 +73,8 @@ HEADERS  += \
     sceneserializer.h \
     scenemanager.h \
     sceneparams.h \
-    sceneinfo.h
+    sceneinfo.h \
+    toinitdataconverter.h
 
 FORMS    += \
     mainwindow.ui \

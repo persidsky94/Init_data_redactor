@@ -15,24 +15,19 @@ MainWindow::MainWindow(QMainWindow *parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	bindActions();
-//	setDefaultSourceParams();
-//	setDefaultRecieverGroupParams();
-//	setDefaultPolygonParams();
-	//this->ui->centralWidget->layout()->setSizeConstraint();
-	_editorsManager = new EditorsManager(this);
+
 	bool needDuplicateButton = false;
-	_listManager = new ItemListManager(this, needDuplicateButton);
-//	_scene = new GridScene(this);
 	_sceneManager = new SceneManager(this);
+	_listManager = new ItemListManager(this, needDuplicateButton);
+	_editorsManager = new EditorsManager(this);
+
 	bindSceneManagerAndEditorsManager();
 	bindSceneManagerAndItemListManager();
 	bindSceneContainerAndItemListManager();
+
 	this->ui->sceneWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	this->ui->centralWidget->layout()->addWidget(_listManager->getWidget());
 	this->ui->centralWidget->layout()->addWidget(_editorsManager->getWidget());
-//	_scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex/*NoIndex*/);
-//	setSceneSize(800,600);
 
 	ui->graphicsView->setScene(_sceneManager->getScene());
 	setViewOptions();
@@ -41,25 +36,8 @@ MainWindow::MainWindow(QMainWindow *parent) :
 	ui->graphicsView->setMouseTracking(true);
 
 	this->showMaximized();
-
-//	_serializer = new SceneSerializer();
-//	QObject::connect(_serializer, &SceneSerializer::addItemToScene, this, &MainWindow::addItemToScene);
 //	connect(_scene, SIGNAL(mouseAt(QPointF)), this, SLOT(on_sceneMouseMoved(QPointF)));
 }
-/*
-void MainWindow::setSceneSize(int width, int height)
-{
-	sceneSizex = width;
-	sceneSizey = height;
-
-//	ui->xBox->setMaximum(sceneSizex);
-//	ui->yBox->setMaximum(sceneSizey);
-//	ui->mousex->setMaximum(sceneSizex);
-//	ui->mousey->setMaximum(sceneSizey);
-
-	_scene->setSceneRect(0,0,sceneSizex, sceneSizey);
-}
-*/
 
 void MainWindow::setViewOptions()
 {
@@ -186,36 +164,6 @@ void MainWindow::on_actionOpen_in_new_window_triggered()
 	auto newCalc = new MainWindow();
 }
 
-/*
-void MainWindow::addNewSourceItem(sourceParams params)
-{
-	auto src = new SourceItem(params, this);
-	addItemToScene(src);
-	src->itemSelected(src);
-}
-
-void MainWindow::addNewRecieverGroup(recieverGroupParams params)
-{
-	auto src = new RecieverGroup(params, this);
-	addItemToScene(src);
-	src->itemSelected(src);
-}
-
-void MainWindow::addNewPolygonItem(polygonParams params)
-{
-	auto poly = new PolygonItem(params, this);
-	addItemToScene(poly);
-	poly->itemSelected(poly);
-}
-
-void MainWindow::addItemToScene(MoveItem *item)
-{
-	_scene->addItem(item);
-	bindItemToScene(item);
-	emit itemAddedToScene(item, 0);
-}
-*/
-
 void MainWindow::bindSceneManagerAndItemListManager()
 {
 	QObject::connect(_sceneManager, &SceneManager::itemAddedToScene, _listManager, &ItemListManager::on_itemAddedToContainer);
@@ -237,71 +185,14 @@ void MainWindow::bindSceneContainerAndItemListManager()
 	QObject::connect(_sceneManager->getItemContainer(), &SceneItemContainer::containerCleared, _listManager, &ItemListManager::on_containerCleared);
 }
 
-/*
-void MainWindow::bindItemToScene(MoveItem *item)
-{
-	QObject::connect(item, &MoveItem::itemSelected, _scene, &GridScene::on_sceneItemSelected);
-	QObject::connect(item, &MoveItem::nameChanged, _scene, &GridScene::on_itemNameChanged);
-}
-*/
-
-void MainWindow::bindActions()
-{
-	//connect(this->ui->actionAddSource, &QAction::triggered, this, &MainWindow::on_actionAddSource_triggered);
-}
-
-/*
-void MainWindow::setDefaultSourceParams()
-{
-	_defaultSourceParams.name = QString("Source");
-	_defaultSourceParams.x = 0;
-	_defaultSourceParams.y = 0;
-	_defaultSourceParams.signalType = sourceParams::Sin;
-}
-
-void MainWindow::setDefaultRecieverGroupParams()
-{
-	_defaultRecieverGroupParams.name = QString("Recievers horizontal group");
-	_defaultRecieverGroupParams.firstx = 0;
-	_defaultRecieverGroupParams.deltax = 30;
-	_defaultRecieverGroupParams.y = 100;
-	_defaultRecieverGroupParams.recieversNumber = 20;
-}
-
-void MainWindow::setDefaultPolygonParams()
-{
-	_defaultPolygonParams.name = QString("Polygon");
-	_defaultPolygonParams.density = 1000;
-	_defaultPolygonParams.x = 30;
-	_defaultPolygonParams.y = 30;
-}
-*/
-/*
-void MainWindow::serializeScene()
-{
-	auto filename = QFileDialog::getSaveFileName(this, "Choose where to save model", QDir::currentPath());
-	QFile::remove(filename);
-	_serializer->serializeSceneToFile(_scene->getItemContainer(), filename);
-}
-
-void MainWindow::deserializeScene()
-{
-	auto filename = QFileDialog::getOpenFileName(this, "Choose from where to load model", QDir::currentPath());
-	_serializer->deserializeFromFileToScene(_scene, filename);
-}
-*/
 void MainWindow::on_actionSaveModel_triggered()
 {
 	_sceneManager->serializeSceneToFile();
-//	serializeScene();
 }
 
 void MainWindow::on_actionLoadModel_triggered()
 {
 	_sceneManager->deserializeSceneFromFile();
-	//_scene->clear();
-	//clear container
-//	deserializeScene();
 }
 
 void MainWindow::on_actionConfigureScene_triggered()
