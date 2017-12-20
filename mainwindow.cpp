@@ -2,8 +2,10 @@
 #include "ui_mainwindow.h"
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QLabel>
 #include <QFile>
 #include <QFileDialog>
+#include <QProcess>
 
 static int randomBetween(int low, int high)
 {
@@ -213,4 +215,40 @@ void MainWindow::on_actionConfigureScene_triggered()
 		_sceneManager->setSceneParams(params);
 	}
 	delete dialog;
+}
+
+void MainWindow::on_actionConvertToInitData_triggered()
+{
+    _sceneManager->convertToInitData();
+}
+
+void MainWindow::on_actionBeginCalculation_triggered()
+{
+    auto p = new QProcess();
+    p->setWorkingDirectory(_sceneManager->getPathToCalcDir());
+    QString file = _sceneManager->getPathToCalcDir() + QString("/acoustic_2d");
+    QStringList params;
+    params << _sceneManager->getPathToCalcDir() + QString("/config.hrdata");
+
+    auto dialog = new QDialog(this);
+    auto layout = new QVBoxLayout(dialog);
+    auto label = new QLabel("Calculating...");
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel, dialog);
+    layout->addWidget(label);
+    layout->addWidget(buttonBox);
+ //   QObject::connect(p, &QProcess::finished, this, &MainWindow::on_calcProcessFinished);
+    QObject::connect(this, &MainWindow::calculationFinished, dialog, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, p, &QProcess::terminate);
+
+    p->start(file, params);
+
+    dialog->exec();
+    delete dialog;
+
+}
+
+void MainWindow::on_calcProcessFinished(int status)
+{
+    emit calculationFinished();
 }

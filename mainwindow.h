@@ -26,6 +26,9 @@ public:
 	explicit MainWindow(QMainWindow *parent = 0);
 	~MainWindow();
 
+signals:
+    void calculationFinished();
+
 private:
 	Ui::MainWindow *ui;
 	const int scrollbarThikness = 16;
@@ -47,6 +50,8 @@ private slots:
 	void on_actionSaveModel_triggered();
 	void on_actionLoadModel_triggered();
 	void on_actionConfigureScene_triggered();
+    void on_actionConvertToInitData_triggered();
+    void on_actionBeginCalculation_triggered();
 
 	void on_actionAddSource_triggered();
 	void on_actionAddReciever_triggered();
@@ -57,6 +62,7 @@ private slots:
 //	void on_sceneMouseMoved(QPointF mousePosition);
 //	void on_itemSelected(MoveItem *selectedItem);
 //	void on_itemDragged(MoveItem *draggedItem);
+    void on_calcProcessFinished(int status);
 
 
 

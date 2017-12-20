@@ -5,6 +5,7 @@
 #include "gridscene.h"
 #include "moveitem.h"
 #include "sceneserializer.h"
+#include "toinitdataconverter.h"
 #include "sourceitem.h"
 #include "recievergroup.h"
 #include "polygonitem.h"
@@ -33,6 +34,8 @@ public:
 	polygonParams getDefaultPolygonParams(){return _defaultPolygonParams;}
 
     void setSceneParams(sceneParams params);
+    void convertToInitData();
+    QString getPathToCalcDir(){return _converter->_pathToCalcDir;}
 
 signals:
 	//for list manager
@@ -54,6 +57,7 @@ private:
 	GridScene *_scene;
 	SceneItemContainer *_itemContainer;
 	SceneSerializer *_serializer;
+    ToInitDataConverter *_converter;
 
 	sceneParams _defaultSceneParams;
 	sourceParams _defaultSourceParams;

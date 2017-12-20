@@ -32,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>859</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdd_2">
@@ -60,6 +60,8 @@
     <addaction name="actionSaveModel"/>
     <addaction name="actionLoadModel"/>
     <addaction name="actionConfigureScene"/>
+    <addaction name="actionConvertToInitData"/>
+    <addaction name="actionBeginCalculation"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -166,6 +168,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionConvertToInitData">
+   <property name="text">
+    <string>Convert to init data</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionBeginCalculation">
+   <property name="text">
+    <string>Begin calculation</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

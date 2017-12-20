@@ -10,6 +10,7 @@
 class SceneItemContainer: public QObject
 {
 	Q_OBJECT
+    friend class ToInitDataConverter;
 public:
 	SceneItemContainer();
 	~SceneItemContainer();

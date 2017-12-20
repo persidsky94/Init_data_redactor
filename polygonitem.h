@@ -25,6 +25,7 @@ public:
 	QString getName() {return getParams().name;}
 	QRectF getBoundingRect();
 	std::vector<VertexItem *> getVertices(){return pVertices;}
+    bool isInsidePolygon(QPoint point){return verticesPolygon.containsPoint(point, Qt::WindingFill);}
 
 public slots:
 	//from vertexListManager

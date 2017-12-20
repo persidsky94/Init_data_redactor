@@ -40,8 +40,8 @@ void GridScene::setBackgroundGrid()
 
 void GridScene::drawBorders()
 {
-	auto width = _params.width;
-	auto height = _params.height;
+    auto width = _params.nodes_x * _params.space_step_x;
+    auto height = _params.nodes_y * _params.space_step_y;
 	auto borderPen = QPen(QColor(0,0,0));
 	auto borderPainter = new QPainter;
 	borderPainter->setPen(borderPen);
@@ -111,5 +111,5 @@ void GridScene::removeItem(QGraphicsItem *item)
 void GridScene::setParams(sceneParams params)
 {
 	_params = params;
-	this->setSceneRect(0,0,params.width, params.height);
+    this->setSceneRect(0, 0, _params.nodes_x * _params.space_step_x, _params.nodes_y * _params.space_step_y);
 }

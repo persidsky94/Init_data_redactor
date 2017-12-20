@@ -27,7 +27,6 @@ public:
 	void addItem(QGraphicsItem *item);
 	void removeItem(QGraphicsItem *item);
 
-//	SceneItemContainer *getItemContainer(){return &_itemContainer;}
 	sceneParams getParams(){return _params;}
 	void setParams(sceneParams params);
 
@@ -40,7 +39,6 @@ signals:
 
 private:
 	sceneParams _params;
-//	SceneItemContainer _itemContainer;
 
 	void setBackgroundGrid();
 	void drawBorders();

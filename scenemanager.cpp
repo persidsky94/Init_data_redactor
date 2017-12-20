@@ -11,6 +11,7 @@ SceneManager::SceneManager(QObject *parent) : QObject(parent)
 	_scene = new GridScene(_defaultSceneParams ,this);
 	_itemContainer = new SceneItemContainer();
 	_serializer = new SceneSerializer();
+    _converter = new ToInitDataConverter(_itemContainer, _scene);
 	doTheBindings();
 }
 
@@ -77,6 +78,11 @@ void SceneManager::deserializeSceneFromFile()
 	_serializer->deserializeFromFileToScene(_scene, filename);
 }
 
+void SceneManager::convertToInitData()
+{
+    _converter->convertToInitData();
+}
+
 void SceneManager::changeSceneSettings()
 {
 	auto dialog = new QDialog;
@@ -126,12 +132,6 @@ void SceneManager::bindSceneToSelf()
 	QObject::connect(this, &SceneManager::selectSceneItem, _scene, &GridScene::on_selectSceneItem);
 }
 
-
-
-
-
-
-
 void SceneManager::setDefaultItemsParams()
 {
 	setDefaultSceneParams();
@@ -143,8 +143,17 @@ void SceneManager::setDefaultItemsParams()
 void SceneManager::setDefaultSceneParams()
 {
 	_defaultSceneParams.name = QString("Scene");
-	_defaultSceneParams.width = 800;
-	_defaultSceneParams.height = 600;
+    _defaultSceneParams.nodes_x = 300;
+    _defaultSceneParams.nodes_y = 300;
+    _defaultSceneParams.space_step_x = 1.0;
+    _defaultSceneParams.space_step_y = 1.0;
+    _defaultSceneParams.time_steps = 2000;
+    _defaultSceneParams.time_step = 0.00005;
+    _defaultSceneParams.save_step = 10;
+    _defaultSceneParams.density = 1.0;
+    _defaultSceneParams.speed_c = 1000.0;
+    _defaultSceneParams.pml_length = 10;
+    _defaultSceneParams.pml_maxvalue = 100.0;
 }
 
 void SceneManager::setDefaultSourceParams()
@@ -167,7 +176,7 @@ void SceneManager::setDefaultRecieverGroupParams()
 void SceneManager::setDefaultPolygonParams()
 {
 	_defaultPolygonParams.name = QString("Polygon");
-	_defaultPolygonParams.density = 1000;
+    _defaultPolygonParams.density = 1;
 	_defaultPolygonParams.x = 30;
 	_defaultPolygonParams.y = 30;
 }

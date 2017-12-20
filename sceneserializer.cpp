@@ -10,7 +10,7 @@ SceneSerializer::SceneSerializer()
 
 void SceneSerializer::serializeSceneToFile(SceneItemContainer *container, QString filename)
 {
-	QFile file(filename);
+    QFile file(filename);
 	file.open(QIODevice::WriteOnly);
 	QDataStream out(&file);
 	serializeSerializerVersion(out);
@@ -51,6 +51,41 @@ bool SceneSerializer::deserializeSerializerVersion(QDataStream &stream)
 		return true;
 	else
 		return false;
+}
+
+void SceneSerializer::serializeSceneParams(GridScene *scene, QDataStream &stream)
+{
+    auto params = scene->getParams();
+    stream << params.name;
+    stream << params.nodes_x;
+    stream << params.nodes_y;
+    stream << params.space_step_x;
+    stream << params.space_step_y;
+    stream << params.time_steps;
+    stream << params.time_step;
+    stream << params.save_step;
+    stream << params.density;
+    stream << params.speed_c;
+    stream << params.pml_length;
+    stream << params.pml_maxvalue;
+}
+
+void SceneSerializer::deserializeSceneParams(QDataStream &stream, GridScene *scene)
+{
+    sceneParams params;
+    stream >> params.name;
+    stream >> params.nodes_x;
+    stream >> params.nodes_y;
+    stream >> params.space_step_x;
+    stream >> params.space_step_y;
+    stream >> params.time_steps;
+    stream >> params.time_step;
+    stream >> params.save_step;
+    stream >> params.density;
+    stream >> params.speed_c;
+    stream >> params.pml_length;
+    stream >> params.pml_maxvalue;
+    scene->setParams(params);
 }
 
 void SceneSerializer::serializeSources(std::vector<SourceItem *> *sources, QDataStream &stream)

@@ -6,8 +6,17 @@
 struct sceneParams
 {
 	QString name;
-	double width;
-	double height;
+    int nodes_x;
+    int nodes_y;
+    double space_step_x;
+    double space_step_y;
+    int time_steps;
+    double time_step;
+    int save_step;
+    double density;
+    double speed_c;
+    int pml_length;
+    double pml_maxvalue;
 };
 
 #endif // SCENEPARAMS_H

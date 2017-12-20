@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>264</width>
-    <height>141</height>
+    <height>369</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,33 +24,180 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="widthLabel">
+      <widget class="QLabel" name="nodesXLabel">
        <property name="text">
-        <string>width</string>
+        <string>nodes x</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="heightLabel">
+      <widget class="QLabel" name="nodesYLabel">
        <property name="text">
-        <string>height</string>
+        <string>nodes y</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="nameLine"/>
      </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="spaceStepXLabel">
+       <property name="text">
+        <string>space step x</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="spaceStepYLabel">
+       <property name="text">
+        <string>spaace step y</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="timeStepsLabel">
+       <property name="text">
+        <string>time steps</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="timeStepLabel">
+       <property name="text">
+        <string>time step</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="densityLabel">
+       <property name="text">
+        <string>density</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="speedCLabel">
+       <property name="text">
+        <string>speed (c)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="pmlLengthLabel">
+       <property name="text">
+        <string>pml length</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="pmlMaxValueLabel">
+       <property name="text">
+        <string>pml max value</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="widthBox">
+      <widget class="QSpinBox" name="nodesXBox">
+       <property name="minimum">
+        <number>1</number>
+       </property>
        <property name="maximum">
-        <double>100000.000000000000000</double>
+        <number>1000000</number>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QDoubleSpinBox" name="heightBox">
+      <widget class="QSpinBox" name="nodesYBox">
+       <property name="minimum">
+        <number>1</number>
+       </property>
        <property name="maximum">
-        <double>100000.000000000000000</double>
+        <number>1000000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QDoubleSpinBox" name="spaceStepXBox">
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QDoubleSpinBox" name="spaceStepYBox">
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="timeStepsBox">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1000000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QDoubleSpinBox" name="timeStepBox">
+       <property name="decimals">
+        <number>6</number>
+       </property>
+       <property name="minimum">
+        <double>0.000010000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.000001000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QDoubleSpinBox" name="densityBox">
+       <property name="maximum">
+        <double>1000000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QDoubleSpinBox" name="speedCBox">
+       <property name="maximum">
+        <double>1000000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QSpinBox" name="pmlLengthBox">
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QDoubleSpinBox" name="pmlMaxValueBox">
+       <property name="maximum">
+        <double>1000000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="saveStepLabel">
+       <property name="text">
+        <string>save step</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QSpinBox" name="saveStepBox">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1000000</number>
        </property>
       </widget>
      </item>
