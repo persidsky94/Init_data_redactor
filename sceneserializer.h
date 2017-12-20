@@ -20,7 +20,7 @@ signals:
 	void addItemToScene(MoveItem *item);
 
 private:
-    static const int serializerVersion = 3;
+    static const int serializerVersion = 4;
 
 	void serializeSerializerVersion(QDataStream& stream);
     void serializeSceneParams(GridScene *scene, QDataStream& stream);

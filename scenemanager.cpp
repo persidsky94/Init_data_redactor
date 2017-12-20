@@ -177,6 +177,7 @@ void SceneManager::setDefaultPolygonParams()
 {
 	_defaultPolygonParams.name = QString("Polygon");
     _defaultPolygonParams.density = 1;
+    _defaultPolygonParams.speed_c = 1000;
 	_defaultPolygonParams.x = 30;
 	_defaultPolygonParams.y = 30;
 }

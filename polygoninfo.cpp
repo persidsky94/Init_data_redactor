@@ -26,6 +26,7 @@ polygonParams PolygonInfo::constructParams()
 	polygonParams params;
 	params.name = this->ui->nameLine->text();
 	params.density = this->ui->densityBox->value();
+    params.speed_c = this->ui->speedCBox->value();
 	params.y =  this->ui->yBox->value();
 	params.x = this->ui->xBox->value();
 	return params;
@@ -40,6 +41,7 @@ void PolygonInfo::updateParams(polygonParams params)
 {
 	this->ui->nameLine->setText(params.name);
 	this->ui->densityBox->setValue(params.density);
+    this->ui->speedCBox->setValue(params.speed_c);
 	this->ui->yBox->setValue(params.y);
 	this->ui->xBox->setValue(params.x);
 }

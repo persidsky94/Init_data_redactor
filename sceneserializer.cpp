@@ -155,6 +155,7 @@ void SceneSerializer::serializePolygonParams(PolygonItem *polygon, QDataStream &
 	auto params = polygon->getParams();
 	stream << params.name;
 	stream << params.density;
+    stream << params.speed_c;
 	stream << params.x;
 	stream << params.y;
 }
@@ -252,6 +253,7 @@ polygonParams SceneSerializer::deserializePolygonParams(QDataStream &stream)
 	polygonParams params;
 	stream >> params.name;
 	stream >> params.density;
+    stream >> params.speed_c;
 	stream >> params.x;
 	stream >> params.y;
 	return params;

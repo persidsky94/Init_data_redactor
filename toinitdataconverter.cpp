@@ -78,10 +78,10 @@ bool ToInitDataConverter::createSourcesBinFile(std::vector<SourceItem *> sources
 //    out.setByteOrder(QDataStream::LittleEndian);
     int counter = 0;
     QString pathToRickerScript = QString("/home/pers/code/cfgexec/python/tools/ricker_impulse.py");
-    QString begin = QString ("-0.3");
-    QString end = QString ("0.07");
+    QString begin = QString ("-0.15");
+    QString end = QString ("0.85");
     QString num = QString::number(_scene->getParams().time_steps);// + QString(" ");
-    QString freq = QString("50");
+    QString freq = QString("100");
     for (auto source : sources)
     {
         QPoint sourceCoord = QPoint(source->getParams().x, source->getParams().y);
