@@ -17,8 +17,8 @@ class PolygonItem : public MoveItem
 	Q_OBJECT
 	friend class ItemListManager;
 public:
-	explicit PolygonItem(polygonParams params, QObject *parent = 0);
-    PolygonItem(polygonParams params, std::vector<VertexItem *> vertices, QObject *parent);
+    explicit PolygonItem(polygonParams params, QObject *parent = 0, bool withFirstVertex = true);
+    void addVertices(std::vector<VertexItem *> vertices);
 	~PolygonItem();
 	polygonParams getParams();
 	void setParams(polygonParams params);
@@ -32,6 +32,8 @@ public slots:
 	void on_duplicateVertex(int vertexIndex);
 	void on_deleteVertex(int vertexIndex);
 
+    void on_childVertexSelected(MoveItem *vertex);
+
 signals:
 	void paramsChanged(polygonParams params);
 	void childVertexParamsChanged(vertexParams params);
@@ -39,6 +41,8 @@ signals:
 	void childVertexCreated(MoveItem *vertex, int index);
 	void childVertexDeleted(MoveItem *vertex);
 	void childVertexSelected(VertexItem *vertex);
+
+    void deleteSelfFromScene(MoveItem *thisPolygon);
 
 private slots:
 	void on_vertexMoved(VertexItem *);
@@ -58,8 +62,9 @@ private:
 	void setDefaultVertexParams();
 
 //	QPointF calculateValidCoordinates(QPointF newCoordinates);
-	void deleteSelfFromScene();
+
 	VertexItem *createChildVertex(int index, qreal localx, qreal localy);
+    void createFirstVertex();
 	void deleteChildVertex(int index);
 	void moveAllVertecesBy(qreal x, qreal y);
 	void movePolygon(qreal scenex, qreal sceney);

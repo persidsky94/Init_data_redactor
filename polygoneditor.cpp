@@ -99,13 +99,17 @@ void PolygonEditor::bindVertexListManagerToPolygon(PolygonItem *polygon)
 {
 	QObject::connect(polygon, &PolygonItem::childVertexCreated, _vertexListManager, &ItemListManager::on_itemAddedToContainer);
 	QObject::connect(polygon, &PolygonItem::childVertexDeleted, _vertexListManager, &ItemListManager::on_itemDeletedFromContainer);
+    QObject::connect(polygon, &PolygonItem::childVertexSelected, _vertexListManager, &ItemListManager::on_itemSelectedInContainer);
+    _vertexListManager->addSignalSender(polygon);
 	QObject::connect(_vertexListManager, &ItemListManager::duplicateContainerItem, polygon, &PolygonItem::on_duplicateVertex);
 	QObject::connect(_vertexListManager, &ItemListManager::deleteContainerItem, polygon, &PolygonItem::on_deleteVertex);
+    QObject::connect(_vertexListManager, &ItemListManager::selectContainerItem, polygon, &PolygonItem::on_childVertexSelected);
 }
 
 void PolygonEditor::unbindVertexListManagerFromEverything()
 {
 	QObject::disconnect(_vertexListManager, 0, 0, 0);
+    _vertexListManager->unbindAllSignalSenders();
 }
 
 void PolygonEditor::bindVertexEditorToVertex(VertexItem *vertex)

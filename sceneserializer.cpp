@@ -8,12 +8,13 @@ SceneSerializer::SceneSerializer()
 
 }
 
-void SceneSerializer::serializeSceneToFile(SceneItemContainer *container, QString filename)
+void SceneSerializer::serializeSceneToFile(SceneItemContainer *container, GridScene *scene, QString filename)
 {
     QFile file(filename);
 	file.open(QIODevice::WriteOnly);
 	QDataStream out(&file);
 	serializeSerializerVersion(out);
+    serializeSceneParams(scene, out);
 	serializeSources(container->getSceneSources(), out);
 	serializeRecievers(container->getSceneRecievers(), out);
 	serializePolygons(container->getScenePolygons(), out);
@@ -33,6 +34,7 @@ void SceneSerializer::deserializeFromFileToScene(GridScene *scene, QString filen
 		//std::cout << "Serializer version incompatible, current version is " << serializerVersion << endl;
 		return;
 	}
+    deserializeSceneParams(in, scene);
 	deserializeSources(in, scene);
 	deserializeRecievers(in, scene);
 	deserializePolygons(in, scene);
@@ -198,14 +200,14 @@ void SceneSerializer::deserializePolygons(QDataStream &stream, GridScene *scene)
 	}
 }
 
-std::vector<VertexItem *> SceneSerializer::deserializePolygonVertices(QDataStream &stream)
+std::vector<VertexItem *> SceneSerializer::deserializePolygonVertices(QDataStream &stream, MoveItem *parent)
 {
 	qint16 numVertices;
 	stream >> numVertices;
 	std::vector<VertexItem *> vertices;
 	for (qint16 i=0; i < numVertices; ++i)
 	{
-		auto vertex = deserializeSingleVertex(stream);
+        auto vertex = deserializeSingleVertex(stream, parent);
 		vertices.push_back(vertex);
 	}
 	return vertices;
@@ -243,8 +245,10 @@ void SceneSerializer::deserializeSingleReciever(QDataStream &stream, GridScene *
 void SceneSerializer::deserializeSinglePolygon(QDataStream &stream, GridScene *scene)
 {
 	auto params = deserializePolygonParams(stream);
-	auto vertices = deserializePolygonVertices(stream);
-	auto polygon = new PolygonItem(params, vertices, scene);
+    auto withFirstVertex = false;
+    auto polygon = new PolygonItem(params, scene, withFirstVertex);
+    auto vertices = deserializePolygonVertices(stream, polygon);
+    polygon->addVertices(vertices);
 	emit addItemToScene(polygon);
 }
 
@@ -259,13 +263,13 @@ polygonParams SceneSerializer::deserializePolygonParams(QDataStream &stream)
 	return params;
 }
 
-VertexItem *SceneSerializer::deserializeSingleVertex(QDataStream &stream)
+VertexItem *SceneSerializer::deserializeSingleVertex(QDataStream &stream, MoveItem *parent)
 {
 	vertexParams params;
 	stream >> params.name;
 	stream >> params.x;
 	stream >> params.y;
 
-	auto vertex = new VertexItem(params);
+    auto vertex = new VertexItem(params, parent);
 	return vertex;
 }

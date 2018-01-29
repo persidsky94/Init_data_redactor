@@ -13,14 +13,14 @@ class SceneSerializer: public QObject
 	Q_OBJECT
 public:
 	SceneSerializer();
-	void serializeSceneToFile(SceneItemContainer *container, QString filename);
+    void serializeSceneToFile(SceneItemContainer *container, GridScene *scene, QString filename);
 	void deserializeFromFileToScene(GridScene *scene, QString filename);
 
 signals:
 	void addItemToScene(MoveItem *item);
 
 private:
-    static const int serializerVersion = 4;
+    static const int serializerVersion = 5;
 
 	void serializeSerializerVersion(QDataStream& stream);
     void serializeSceneParams(GridScene *scene, QDataStream& stream);
@@ -40,13 +40,13 @@ private:
 	void deserializeSources(QDataStream& stream, GridScene *scene);
 	void deserializeRecievers(QDataStream& stream, GridScene *scene);
 	void deserializePolygons(QDataStream& stream, GridScene *scene);
-	std::vector<VertexItem *> deserializePolygonVertices(QDataStream& stream);
+    std::vector<VertexItem *> deserializePolygonVertices(QDataStream& stream, MoveItem *parent);
 
 	void deserializeSingleSource(QDataStream& stream, GridScene *scene);
 	void deserializeSingleReciever(QDataStream& stream, GridScene *scene);
 	void deserializeSinglePolygon(QDataStream& stream, GridScene *scene);
 	polygonParams deserializePolygonParams(QDataStream& stream);
-	VertexItem *deserializeSingleVertex(QDataStream& stream);
+    VertexItem *deserializeSingleVertex(QDataStream& stream, MoveItem *parent);
 
 };
 

@@ -16,7 +16,7 @@ class MoveItem : public QObject, public QGraphicsItem
 public:
 	explicit MoveItem(QObject *parent = 0);
 	~MoveItem();
-	virtual QString getType() = 0;
+    virtual QString getType() = 0;
 	virtual QString getName() = 0;
 
 signals:

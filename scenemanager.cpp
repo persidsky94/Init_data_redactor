@@ -33,6 +33,7 @@ void SceneManager::addNewPolygonItem(polygonParams params)
 {
 	auto poly = new PolygonItem(params, this);
 	addItemToScene(poly);
+    QObject::connect(poly, &PolygonItem::deleteSelfFromScene, this, &SceneManager::removeItemFromScene);
 	poly->itemSelected(poly);
 }
 
@@ -68,7 +69,7 @@ void SceneManager::serializeSceneToFile()
 {
 	auto filename = QFileDialog::getSaveFileName(NULL, "Choose where to save model", QDir::currentPath());
 	QFile::remove(filename);
-	_serializer->serializeSceneToFile(_itemContainer, filename);
+    _serializer->serializeSceneToFile(_itemContainer, _scene, filename);
 }
 
 void SceneManager::deserializeSceneFromFile()

@@ -1,7 +1,7 @@
 #include "polygonitem.h"
 #include <iostream>
 
-PolygonItem::PolygonItem(polygonParams params, QObject *parent)
+PolygonItem::PolygonItem(polygonParams params, QObject *parent, bool withFirstVertex)
 	: MoveItem(parent), _params(params)
 {
 	setDefaultVertexParams();
@@ -9,26 +9,29 @@ PolygonItem::PolygonItem(polygonParams params, QObject *parent)
 	connect(this, &PolygonItem::positionIsSet, this, &PolygonItem::on_positionIsSet);
 	setParams(params);
 
-	int vertexIndex = 0;
-	qreal vertexLocalx = 0;
-	qreal vertexLocaly = 0;
-	createChildVertex(vertexIndex, vertexLocalx, vertexLocaly);
+    if (withFirstVertex)
+        createFirstVertex();
 }
 
-PolygonItem::PolygonItem(polygonParams params, std::vector<VertexItem *> vertices, QObject *parent)
-	: MoveItem(parent), _params(params)
+void PolygonItem::createFirstVertex()
 {
-	setDefaultVertexParams();
-	this->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
-	connect(this, &PolygonItem::positionIsSet, this, &PolygonItem::on_positionIsSet);
-	setParams(params);
-	for (auto &vertex: vertices)
-	{
-		vertex->setParentItem(this);
-		bindVertexSignals(vertex);
-		pVertices.push_back(vertex);
-	}
-	updateVerticesPolygon();
+    int vertexIndex = 0;
+    qreal vertexLocalx = 0;
+    qreal vertexLocaly = 0;
+    createChildVertex(vertexIndex, vertexLocalx, vertexLocaly);
+}
+
+void PolygonItem::addVertices(std::vector<VertexItem *> vertices)
+{
+    for (auto vertex: vertices)
+    {
+        vertex->QGraphicsItem::setParentItem(this);
+        QObject::connect(vertex, &VertexItem::itemSelected, this, &PolygonItem::on_itemSelected);
+        QObject::connect(vertex, &VertexItem::itemDragged, this, &PolygonItem::on_itemDragged);
+        bindVertexSignals(vertex);
+        pVertices.push_back(vertex);
+    }
+    updateVerticesPolygon();
 }
 
 void PolygonItem::setDefaultVertexParams()
@@ -211,7 +214,7 @@ void PolygonItem::deleteChildVertex(int vertexIndex)
 		return;
 	}
 	if ((pVertices.size() == 1))
-		deleteSelfFromScene();
+        emit deleteSelfFromScene(this);
 	else
 	{
 		auto deletedVertex = pVertices[vertexIndex];
@@ -225,11 +228,16 @@ void PolygonItem::deleteChildVertex(int vertexIndex)
 	}
 }
 
+void PolygonItem::on_childVertexSelected(MoveItem *vertex)
+{
+    emit childVertexSelected((VertexItem *)vertex);
+}
+/*
 void PolygonItem::deleteSelfFromScene()
 {
 	this->scene()->removeItem(this);
 }
-
+*/
 /*
 void PolygonItem::on_vertexAskToClone(VertexItem *clonedVertex)
 {

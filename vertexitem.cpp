@@ -25,6 +25,7 @@ void VertexItem::setParams(vertexParams params)
 	if (name_has_changed)
 		emit nameChanged(this);
 	emit paramsChanged(_params);
+    emit vertexMoved(this);
 	if (this->scene())
 	{
 		this->scene()->update(mapRectToScene(prevBoundingRect));

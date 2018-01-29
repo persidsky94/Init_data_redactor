@@ -38,6 +38,8 @@ public:
     QString getPathToCalcDir(){return _converter->_pathToCalcDir;}
 
 signals:
+    //from list manager
+    void deselect();
 	//for list manager
 	void itemAddedToScene(MoveItem *addedItem, int index);
 	void itemRemovedFromScene(MoveItem *removedItem);
@@ -52,6 +54,7 @@ signals:
 	void sceneCleared();
 
 public slots:
+    void on_deselect() {emit deselect();}
 
 private:
 	GridScene *_scene;

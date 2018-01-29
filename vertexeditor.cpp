@@ -5,7 +5,7 @@
 VertexEditor::VertexEditor(QWidget *parent) : QObject(parent)
 {
 	_widget = new QWidget(parent);
-	_widget->setFixedWidth(300);
+//	_widget->setFixedWidth(300);
 	_widget->setStyleSheet("border: 1px solid black");
 	auto layout = new QVBoxLayout();
 	_widget->setLayout(layout);

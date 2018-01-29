@@ -14,7 +14,7 @@
    <string>Calculation</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout" name="centralWidgetHorizontalLayout">
     <item>
      <widget class="QWidget" name="sceneWidget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout">

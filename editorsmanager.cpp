@@ -25,7 +25,12 @@ EditorsManager::EditorsManager(QWidget *parent) : QObject(parent)
 
 void EditorsManager::on_sceneCleared()
 {
-	invalidateSelection();
+    on_deselect();
+}
+void EditorsManager::on_deselect()
+{
+    hideAllRedactors();
+    invalidateSelection();
 }
 
 void EditorsManager::invalidateSelection()
@@ -56,6 +61,7 @@ MoveItem *EditorsManager::proxyNewRedactedItem(MoveItem *newRedactedItem)
 			polygonEditor->bindVertexEditorToVertex(dynamic_cast<VertexItem *>(newRedactedItem));
 			polygonEditor->initVertexEditorWithParams(dynamic_cast<VertexItem *>(newRedactedItem)->getParams());
 		}
+        emit vertexSelected(dynamic_cast<VertexItem *>(newRedactedItem));
 		return  dynamic_cast<MoveItem *>(newRedactedItem->parent());
 	}
 	else
@@ -96,6 +102,16 @@ void EditorsManager::hideActiveRedactor()
 			std::cout << " EditorsManager::showActiveRedactor: " << "Unknown MoveItem type selected: " << redactedItem->getType().toStdString() << std::endl;
 		}
 	}
+}
+
+void EditorsManager::hideAllRedactors()
+{
+    if (sourceEditor)
+        sourceEditor->hide();
+    if (recieverEditor)
+        recieverEditor->hide();
+    if (polygonEditor)
+        polygonEditor->hide();
 }
 
 void EditorsManager::showActiveRedactor()

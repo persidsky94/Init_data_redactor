@@ -1,6 +1,7 @@
 #ifndef ITEMLISTMANAGER_H
 #define ITEMLISTMANAGER_H
 
+#include <vector>
 #include <QObject>
 #include <QListWidget>
 #include <QPushButton>
@@ -17,11 +18,14 @@ public:
 	void addSelfToLayout(QLayout *layout){layout->addWidget(_widget);}
 	void parsePolygon(PolygonItem *polygon);
 	void clearList();
+    void addSignalSender(QObject *);
+    void unbindAllSignalSenders();
 
 signals:
 	void deleteContainerItem(int containerItemIndex);
 	void deleteContainerItemByPtr(MoveItem *containerItemToDelete);
 	void selectContainerItem(MoveItem *containerItemToSelect);
+    void deselect();
 	void duplicateContainerItem(int containerItemIndex);
 
 public slots:
@@ -39,6 +43,7 @@ public slots:
 	void on_listItemSelected(QListWidgetItem *listItem);
 
 private:
+    std::vector<QObject *> signalSenders;
 	MoveItem *selectedItem;
 	QWidget *_widget;
 	QListWidget *_listWidget;

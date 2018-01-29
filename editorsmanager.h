@@ -20,6 +20,10 @@ public:
 	void changeRedactedItem(MoveItem *newRedactedItem);
 
 	void on_sceneCleared();
+    void on_deselect();
+
+signals:
+    void vertexSelected(VertexItem *vertex);
 
 private:
 	MoveItem *redactedItem;
@@ -35,6 +39,7 @@ private:
 	void bindRedactedItem();
 	void setRedactedItem(MoveItem *newItem);
 	void hideActiveRedactor();
+    void hideAllRedactors();
 	void showActiveRedactor();
 };
 

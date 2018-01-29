@@ -38,6 +38,8 @@ private:
 	ItemListManager *_listManager = NULL;
 
 
+    void initInternal();
+    void deinitInternal();
 	void setViewOptions();
 	void updateGraphicsViewSize();
 

@@ -18,27 +18,47 @@ MainWindow::MainWindow(QMainWindow *parent) :
 {
 	ui->setupUi(this);
 
-	bool needDuplicateButton = false;
-	_sceneManager = new SceneManager(this);
-	_listManager = new ItemListManager(this, needDuplicateButton);
-	_editorsManager = new EditorsManager(this);
+    initInternal();
+}
 
-	bindSceneManagerAndEditorsManager();
-	bindSceneManagerAndItemListManager();
-	bindSceneContainerAndItemListManager();
+void MainWindow::initInternal()
+{
+    bool needDuplicateButton = false;
+    _sceneManager = new SceneManager(this);
+    _listManager = new ItemListManager(this, needDuplicateButton);
+    _editorsManager = new EditorsManager(this);
 
-	this->ui->sceneWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	this->ui->centralWidget->layout()->addWidget(_listManager->getWidget());
-	this->ui->centralWidget->layout()->addWidget(_editorsManager->getWidget());
+    bindSceneManagerAndEditorsManager();
+    bindSceneManagerAndItemListManager();
+    bindSceneContainerAndItemListManager();
 
-	ui->graphicsView->setScene(_sceneManager->getScene());
-	setViewOptions();
-	updateGraphicsViewSize();
+    this->ui->sceneWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->ui->centralWidget->layout()->addWidget(_listManager->getWidget());
+    this->ui->centralWidget->layout()->addWidget(_editorsManager->getWidget());
 
-	ui->graphicsView->setMouseTracking(true);
+    _listManager->getWidget()->setMinimumWidth(300);
 
-	this->showMaximized();
+    this->ui->centralWidgetHorizontalLayout->setStretchFactor(this->ui->sceneWidget, 1);
+    this->ui->centralWidgetHorizontalLayout->setStretchFactor(_listManager->getWidget(), 0);
+    this->ui->centralWidgetHorizontalLayout->setStretchFactor(_editorsManager->getWidget(), 0);
+
+    //    this->ui->sceneWidget->setS
+
+    ui->graphicsView->setScene(_sceneManager->getScene());
+    setViewOptions();
+    updateGraphicsViewSize();
+
+    ui->graphicsView->setMouseTracking(true);
+
+    this->showMaximized();
 //	connect(_scene, SIGNAL(mouseAt(QPointF)), this, SLOT(on_sceneMouseMoved(QPointF)));
+}
+
+void MainWindow::deinitInternal()
+{
+    delete _sceneManager;
+    delete _listManager;
+    delete _editorsManager;
 }
 
 void MainWindow::setViewOptions()
@@ -174,12 +194,14 @@ void MainWindow::bindSceneManagerAndItemListManager()
 	QObject::connect(_sceneManager, &SceneManager::sceneItemDeleted, _listManager, &ItemListManager::on_itemDeletedFromContainer);
 	QObject::connect(_listManager, &ItemListManager::selectContainerItem, _sceneManager, &SceneManager::selectSceneItem);
 	QObject::connect(_listManager, &ItemListManager::deleteContainerItemByPtr, _sceneManager, &SceneManager::removeItemFromScene);
+    QObject::connect(_listManager, &ItemListManager::deselect, _sceneManager, &SceneManager::on_deselect);
 }
 
 void MainWindow::bindSceneManagerAndEditorsManager()
 {
 	QObject::connect(_sceneManager, &SceneManager::sceneItemSelected, _editorsManager, &EditorsManager::changeRedactedItem);
 	QObject::connect(_sceneManager, &SceneManager::sceneCleared, _editorsManager, &EditorsManager::on_sceneCleared);
+    QObject::connect(_sceneManager, &SceneManager::deselect, _editorsManager, &EditorsManager::on_deselect);
 }
 
 void MainWindow::bindSceneContainerAndItemListManager()
@@ -194,7 +216,10 @@ void MainWindow::on_actionSaveModel_triggered()
 
 void MainWindow::on_actionLoadModel_triggered()
 {
+//    deinitInternal();
+//    initInternal();
 	_sceneManager->deserializeSceneFromFile();
+    updateGraphicsViewSize();
 }
 
 void MainWindow::on_actionConfigureScene_triggered()
@@ -213,6 +238,7 @@ void MainWindow::on_actionConfigureScene_triggered()
 	{
 		auto params = initEditor->constructParams();
 		_sceneManager->setSceneParams(params);
+        updateGraphicsViewSize();
 	}
 	delete dialog;
 }
